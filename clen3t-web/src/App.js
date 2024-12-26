@@ -3,6 +3,8 @@ import api from './api/axiosConfig'
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Start from './pages/Start';
+import Game from './pages/Game';
+// import Footer from './components/Footer';
 
 
 function App() {
@@ -27,8 +29,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Start />} />
-        {/* <Route path="login" element={<Login />} />
-        <Route path="game" element={<Game />} /> */}
+        {/* <Route path="login" element={<Login />} /> */}
+        <Route path="game" element={<Game />} />
       </Routes>
     </BrowserRouter>
   );

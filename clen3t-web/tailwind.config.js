@@ -6,10 +6,11 @@ module.exports = {
             colors: {
                 primary: "#099e6a",
                 "primary-red": "#C65252",
-                "primary-red-dark": "#19497d",
-                "primary-red-darker": "#0d3764",
+                "primary-red-dark": "#aa4444",
+                "primary-red-darker": "#8a3636",
                 "primary-text": "#F5F5F5",
                 "primary-background": "#1C1D21",
+                "primary-background-light": "35363D",
                 "primary-blue": "#5299C6",
                 "primary-blue-dark": "#19497d",
                 "primary-blue-darker": "#0d3764",
@@ -70,5 +71,7 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    plugins: [
+      require('@tailwindcss/aspect-ratio'),
+    ],
 };

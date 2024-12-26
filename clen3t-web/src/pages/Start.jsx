@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+
 const Start = () => {
     
     
@@ -13,14 +16,12 @@ const Start = () => {
                     </div>
 
                     <div className="flex justify-center">
-                        <button className="bg-primary-red px-10 py-3 rounded-lg text-3xl">Start.</button>
+                        <Link to={"/game"} className="bg-primary-red px-10 py-3 rounded-lg text-3xl hover:bg-primary-red-dark active:bg-primary-red-darker">Start.</Link>
                     </div>
                 </div>
             </div>
 
-            <div className="ml-[1%]">
-                <p>github.com/clen678</p>
-            </div>
+            <Footer/>
         </div>
 
      );
