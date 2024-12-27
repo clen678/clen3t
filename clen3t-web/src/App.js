@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Start from './pages/Start';
 import Game from './pages/Game';
-// import Footer from './components/Footer';
+import Login from './pages/Login';
+import { LoginContextProvider } from './context/LoginContextProvider';
 
 
 function App() {
@@ -27,11 +28,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Start />} />
-        {/* <Route path="login" element={<Login />} /> */}
-        <Route path="game" element={<Game />} />
-      </Routes>
+      <LoginContextProvider>
+        <Routes>
+          <Route path="/" element={<Start />} />
+          <Route path="login" element={<Login />} />
+          <Route path="game" element={<Game />} />
+        </Routes>
+      </LoginContextProvider>
     </BrowserRouter>
   );
 }

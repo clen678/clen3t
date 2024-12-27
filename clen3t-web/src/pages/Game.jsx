@@ -1,18 +1,22 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import StdButton from "../components/StdButton";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from '../api/axiosConfig'
 import LeaderboardCard from "../components/LeaderboardCard";
+import LoginContext from "../context/LoginContext";
+import { useNavigate } from "react-router-dom";
 
 const Game = () => {
 
-    const [username, setUsername] = useState("Guest");
+    // const [username, setUsername] = useState("Guest");
     const [turn, setTurn] = useState("Your turn")
     const background = "bg-primary-background-light rounded-lg px-5 pt-3"
     const menuText = "text-xl"
+    const navigate = useNavigate();
 
     const [users, setUsers] = useState();
+    const { currentUser } = useContext(LoginContext);
 
     useEffect(() => {
       const fetchUsers = async () => {
@@ -20,20 +24,21 @@ const Game = () => {
           const response = await api.get("/api/users");
           setUsers(response.data);
           console.log("fetched users:", response.data);
+            console.log("current user is:", currentUser)
         } catch (error) {
           console.error("Error fetching users:", error);
         }
       };
 
       fetchUsers();
-    }, []);
+    }, [currentUser]);
 
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
             
             {/* content */}
             <div className="h-[96%] flex flex-col items-center">
-                <Header username={username} />
+                <Header username={currentUser ? currentUser.username : "Guest"} />
 
                 <div className="flex justify-between w-[50%] gap-5">
 
