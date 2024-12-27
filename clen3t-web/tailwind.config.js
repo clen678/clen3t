@@ -10,10 +10,10 @@ module.exports = {
                 "primary-red-darker": "#8a3636",
                 "primary-text": "#F5F5F5",
                 "primary-background": "#1C1D21",
-                "primary-background-light": "35363D",
+                "primary-background-light": "#35363D",
                 "primary-blue": "#5299C6",
-                "primary-blue-dark": "#19497d",
-                "primary-blue-darker": "#0d3764",
+                "primary-blue-dark": "#4380a7",
+                "primary-blue-darker": "#356786",
             },
             fontSize: {
                 massive: [
