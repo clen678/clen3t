@@ -61,7 +61,7 @@ const Login = () => {
                             <input type="text" id="username" className={inputStyle} onChange={(e) => setUsername(e.target.value)} value={username} required />
 
                             <label htmlFor="password" className={labelStyle}>Password</label>
-                            <input type="text" id="password" className={inputStyle} onChange={(e) => setPassword(e.target.value)} value={password} required />
+                            <input type="password" id="password" className={inputStyle} onChange={(e) => setPassword(e.target.value)} value={password} required />
                         </div>
                     </div>
 

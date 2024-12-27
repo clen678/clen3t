@@ -44,8 +44,8 @@ const Game = () => {
 
                     {/* left pannel */}
                     <div className="flex flex-col gap-5 w-[100%]">
-                        <div className="bg-primary-background-light aspect-1 rounded-lg">
-                            
+                        <div className="bg-primary-background-light aspect-1 rounded-lg flex justify-center items-center">
+                            <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" />
                         </div>
 
                         <div className="flex justify-between">
