@@ -11,6 +11,7 @@ module.exports = {
                 "primary-text": "#F5F5F5",
                 "primary-background": "#1C1D21",
                 "primary-background-light": "#35363D",
+                "primary-background-lighter" : "#4A4C54",
                 "primary-blue": "#5299C6",
                 "primary-blue-dark": "#4380a7",
                 "primary-blue-darker": "#356786",
@@ -73,5 +74,6 @@ module.exports = {
     },
     plugins: [
       require('@tailwindcss/aspect-ratio'),
+      require('tailwind-scrollbar'),
     ],
 };

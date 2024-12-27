@@ -1,5 +1,5 @@
 import './App.css';
-import api from './api/axiosConfig'
+// import api from './api/axiosConfig'
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Start from './pages/Start';

@@ -16,7 +16,7 @@ const Start = () => {
                     </div>
 
                     <div className="flex justify-center">
-                        <Link to={"/game"} className="bg-primary-red px-10 py-3 rounded-lg text-3xl hover:bg-primary-red-dark active:bg-primary-red-darker">Start.</Link>
+                        <Link to={"/game"} className="bg-primary-red px-10 py-3 rounded-lg text-3xl hover:bg-primary-red-dark active:bg-primary-red-darker">Start</Link>
                     </div>
                 </div>
             </div>
