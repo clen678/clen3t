@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.cleng.clen3t.domain.User;
+import dev.cleng.clen3t.exceptions.UserConflictException;
 import dev.cleng.clen3t.service.UserService;
 
 @CrossOrigin(origins = "*")
@@ -38,8 +39,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return new ResponseEntity<User>(userService.createNewUser(user), HttpStatus.CREATED);
+    public ResponseEntity<Optional<User>> createUser(@RequestBody User user) throws UserConflictException {
+
+        try {
+            return new ResponseEntity<Optional<User>>(userService.createNewUser(user), HttpStatus.CREATED);
+        } catch (UserConflictException e) {
+            return new ResponseEntity<Optional<User>>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<Optional<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")

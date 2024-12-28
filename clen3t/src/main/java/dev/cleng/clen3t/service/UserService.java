@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import dev.cleng.clen3t.UserRepository;
 import dev.cleng.clen3t.domain.User;
+import dev.cleng.clen3t.exceptions.UserConflictException;
 
 @Service
 public class UserService {
@@ -31,8 +32,22 @@ public class UserService {
     }
 
     // Create a new user
-    public User createNewUser(User user) {
-        return userRepository.insert(user);
+    public Optional<User> createNewUser(User user) throws UserConflictException {
+        
+        //validate unique username
+        List<User> users = userRepository.findAll();
+        for (User u : users) {
+            if (u.getUsername().equals(user.getUsername())) {
+                throw new UserConflictException("Username already exists");
+            }
+        }
+        
+        try {
+            return Optional.of(userRepository.insert(user));
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return null;
     }
 
     // Update a user
