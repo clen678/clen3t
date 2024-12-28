@@ -16,7 +16,7 @@ const Game = () => {
     const navigate = useNavigate();
 
     const [users, setUsers] = useState();
-    const { currentUser } = useContext(LoginContext);
+    const { currentUser, deleteUser } = useContext(LoginContext);
 
     useEffect(() => {
       const fetchUsers = async () => {
@@ -60,6 +60,9 @@ const Game = () => {
                         {/* settings */}
                         <div className={`h-[45%] ${background}`}>
                             <h1 className={menuText}>Settings:</h1>
+                            <div>
+                                <button className="hover:text-primary-blue active:text-primary-blue-darker ml-2" onClick={deleteUser}>delete</button>
+                            </div>
                         </div>
 
                         {/* leaderboard */}

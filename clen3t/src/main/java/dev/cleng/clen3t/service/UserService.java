@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import dev.cleng.clen3t.UserRepository;
 import dev.cleng.clen3t.domain.User;
 import dev.cleng.clen3t.exceptions.UserConflictException;
+import dev.cleng.clen3t.exceptions.UserNotFoundException;
 
 @Service
 public class UserService {
@@ -33,7 +34,7 @@ public class UserService {
 
     // Create a new user
     public Optional<User> createNewUser(User user) throws UserConflictException {
-        
+
         //validate unique username
         List<User> users = userRepository.findAll();
         for (User u : users) {
@@ -61,5 +62,14 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public void deleteSingleUser(ObjectId id) throws UserNotFoundException {
+    try {
+        Optional<User> user = userRepository.findById(id);
+        userRepository.deleteById(id);
+    } catch (UserNotFoundException e) {
+        return;
+    }
     }
 }
