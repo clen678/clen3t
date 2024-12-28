@@ -1,3 +1,4 @@
+import '../autofill.css';
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import StdButton from "../components/StdButton";
@@ -7,8 +8,8 @@ import LoginContext from "../context/LoginContext";
 
 const Login = () => {
     
-    const labelStyle = "text-lg"
-    const inputStyle = "text-primary-background px-2 rounded-md border-transparent outline-none mb-5 h-8"
+    const labelStyle = "text-xl ml-1"
+    const inputStyle = "text-primary-text px-3 rounded-md border-transparent outline-none mb-5 h-9 bg-primary-background-lighter caret-primary-text text-lg"
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -51,7 +52,7 @@ const Login = () => {
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
             <div className="flex justify-center h-[96%]">
 
-                <form action="" className="mt-[10%] w-[30%] h-[70%] flex flex-col justify-between bg-primary-background-light px-8 py-8" onSubmit={handleSubmit}>
+                <form action="" className="mt-[10%] w-[30%] h-[70%] flex flex-col justify-between rounded-lg bg-primary-background-light px-8 py-8" onSubmit={handleSubmit}>
                     <div>
                         <h1 className="text-5xl">tic tac toe.</h1>
                         <h2 className="text-3xl ">clen3t</h2>
@@ -66,7 +67,7 @@ const Login = () => {
                     </div>
 
                     <div className="flex justify-between items-end">
-                        <Link to="/register" className="hover:text-primary-blue active:text-primary-blue-darker">Register</Link>
+                        <Link to="/register" className="hover:text-primary-blue active:text-primary-blue-darker ml-3">Register To Create Account</Link>
                         <button type="submit" className="text-xl py-1 px-6 rounded-lg w-[7.5rem] text-center bg-primary-blue hover:bg-primary-blue-dark active:bg-primary-blue-darker">Sign In</button>
                     </div>
                 </form>
