@@ -44,8 +44,20 @@ const Game = () => {
 
                     {/* left pannel */}
                     <div className="flex flex-col gap-5 w-[100%]">
-                        <div className="bg-primary-background-light aspect-1 rounded-lg flex justify-center items-center">
+                        <div className="relative bg-primary-background-light aspect-1 rounded-lg flex justify-center items-center">
                             <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
+
+                            <div className="absolute top-[9%] left-[8.6%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all"/>
+                            <div className="absolute top-[9%] left-[37.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute top-[9%] left-[66.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+
+                            <div className="absolute top-[37.6%] left-[8.6%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute top-[37.6%] left-[37.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute top-[37.6%] left-[66.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+
+                            <div className="absolute top-[66.4%] left-[8.6%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute top-[66.4%] left-[37.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute top-[66.4%] left-[66.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
                         </div>
 
                         <div className="flex justify-between">
@@ -74,7 +86,7 @@ const Game = () => {
                         <div className={`h-[60%] ${background} grid grid-rows-[40px_6fr] min-h-0`}>
                             <h1 className={menuText}>Leaderboard:</h1>
 
-                            <div className="flex-grow max-h-full flex flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
+                            <div className="flex-grow h-[98%] flex flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
                                 {users && users.length > 0
                                     ? users
                                     .sort((a, b) => b.highscore - a.highscore)
