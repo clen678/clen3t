@@ -31,6 +31,7 @@ const Login = () => {
                 console.log("found user:", user);
                 setCurrentUser(user);
             } else {
+                alert("Username or password incorrect")
                 console.log("no users found for login details:", username, password)
             }
             

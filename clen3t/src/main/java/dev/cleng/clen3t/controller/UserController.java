@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getUser(@PathVariable ObjectId id) {
+    public ResponseEntity<Optional<User>> getUser(@PathVariable String id) {
         return new ResponseEntity<Optional<User>>(userService.getSingleUser(id), HttpStatus.OK);
     }
 
@@ -53,12 +53,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<User>> updateUser(@PathVariable ObjectId id) {
+    public ResponseEntity<Optional<User>> updateUser(@PathVariable String id) {
         return new ResponseEntity<Optional<User>>(userService.getSingleUser(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable ObjectId id) throws UserNotFoundException {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) throws UserNotFoundException {
         
         try {
             userService.deleteSingleUser(id);

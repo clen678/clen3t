@@ -23,6 +23,7 @@ const Register = () => {
             if (password == password2) {
                 const response = await api.post("/api/users", {username: username, password: password});
                 console.log("response:", response.data);
+                setCurrentUser(response.data)
             } else {
                 alert("Passwords do not match.")
             }

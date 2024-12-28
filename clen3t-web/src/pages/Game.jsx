@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 const Game = () => {
 
     // const [username, setUsername] = useState("Guest");
-    const [turn, setTurn] = useState("Your turn")
-    const background = "bg-primary-background-light rounded-lg px-5 pt-3"
+    const [turn, setTurn] = useState("Your Turn")
+    const background = "bg-primary-background-light rounded-lg px-5 py-3"
     const menuText = "text-xl"
     const navigate = useNavigate();
 
@@ -58,18 +58,23 @@ const Game = () => {
                     <div className="flex flex-col w-[50%] gap-5">
 
                         {/* settings */}
-                        <div className={`h-[45%] ${background}`}>
+                        <div className={`h-[40%] ${background} grid grid-rows-[40px_1fr_1fr]`}>
                             <h1 className={menuText}>Settings:</h1>
-                            <div>
-                                <button className="hover:text-primary-blue active:text-primary-blue-darker ml-2" onClick={deleteUser}>delete</button>
+                            <div className="flex flex-col gap-[5%] justify-between">
+                                    <p>setting 1</p>
+                                    <p>setting 2</p>
+                                    <p>setting 3</p>
+                            </div>
+                            <div className="justify-self-end self-end">
+                                {currentUser && <button className=" hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}
                             </div>
                         </div>
 
                         {/* leaderboard */}
-                        <div className={`h-[55%] ${background}`}>
+                        <div className={`h-[60%] ${background} grid grid-rows-[40px_6fr] min-h-0`}>
                             <h1 className={menuText}>Leaderboard:</h1>
 
-                            <div className="flex flex-col gap-2 mt-4 overflow-x-hidden overflow-y-scroll h-[80%] rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
+                            <div className="flex-grow max-h-full flex flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
                                 {users && users.length > 0
                                     ? users
                                     .sort((a, b) => b.highscore - a.highscore)

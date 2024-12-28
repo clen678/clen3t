@@ -1,16 +1,18 @@
 import LoginContext from "./LoginContext.jsx"
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig'
 
 export function LoginContextProvider({ children }) {
 
+    const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState();
 
     const deleteUser = async () => {
-        console.log("deeitng id", currentUser.username, currentUser._id)
+        console.log("deleting id", currentUser.username, currentUser.userId)
         try {
-            const response = await api.delete(`/api/users/${currentUser._id}`);
-            console.log("deleted user:", response.data);
+            const response = await api.delete(`/api/users/${currentUser.userId}`);
+            setCurrentUser();
         } catch (error) {
             console.error("Error deleting users:", error);
         }

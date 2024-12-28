@@ -18,8 +18,8 @@ public class User {
     @Id
     private ObjectId id;
     
-    // @Indexed(unique = true)
-    // private String userId;
+    @Indexed(unique = true)
+    private String userId;
 
     @Indexed(unique = true)
     private String username;
