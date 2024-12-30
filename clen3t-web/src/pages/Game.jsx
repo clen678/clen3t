@@ -6,7 +6,7 @@ import api from '../api/axiosConfig'
 import LeaderboardCard from "../components/LeaderboardCard";
 import LoginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
-import { RxCross2 } from "react-icons/rx";
+import { RxCross2, RxCircle } from "react-icons/rx";
 
 const Game = () => {
 
@@ -28,6 +28,16 @@ const Game = () => {
     const [XBL, setXBL] = useState(false);
     const [XBM, setXBM] = useState(false);
     const [XBR, setXBR] = useState(false);
+
+    const [CTL, setCTL] = useState(false);
+    const [CTM, setCTM] = useState(false);
+    const [CTR, setCTR] = useState(false);
+    const [CML, setCML] = useState(false);
+    const [CMM, setCMM] = useState(false);
+    const [CMR, setCMR] = useState(false);
+    const [CBL, setCBL] = useState(false);
+    const [CBM, setCBM] = useState(false);
+    const [CBR, setCBR] = useState(false);
 
     const [board, setBoard] = useState({
         grid: [
@@ -53,11 +63,80 @@ const Game = () => {
       fetchUsers();
     }, [currentUser]);
 
-    const sendBoard = async () => {
+    // updates board from player input
+    const updatePlayerBoard = (placed) => {
+        setTurn("AI's Turn")
+        if (placed === 'XTL') {
+            setXTL(true);
+            board.grid[0][0] = 1;
+        } else if (placed === 'XTM') {
+            setXTM(true);
+            board.grid[0][1] = 1;
+        } else if (placed === 'XTR') {
+            setXTR(true);
+            board.grid[0][2] = 1;
+        } else if (placed === 'XML') {
+            setXML(true);
+            board.grid[1][0] = 1;
+        } else if (placed === 'XMM') {
+            setXMM(true);
+            board.grid[1][1] = 1;
+        } else if (placed === 'XMR') {
+            setXMR(true);
+            board.grid[1][2] = 1;
+        } else if (placed === 'XBL') {
+            setXBL(true);
+            board.grid[2][0] = 1;
+        } else if (placed === 'XBM') {
+            setXBM(true);
+            board.grid[2][1] = 1;
+        } else if (placed === 'XBR') {
+            setXBR(true);
+            board.grid[2][2] = 1;
+        }
+        sendBoard(board);
+    } 
+
+    // renders the board as per server's input
+    const updateServerBoard = (serverBoard) => {
+        if (serverBoard.grid[0][0] === 2) {
+            setCTL(true);
+        } 
+        if (serverBoard.grid[0][1] === 2) {
+            setCTM(true);
+        } 
+        if (serverBoard.grid[0][2] === 2) {
+            setCTR(true);
+        } 
+        if (serverBoard.grid[1][0] === 2) {
+            setCML(true);
+        } 
+        if (serverBoard.grid[1][1] === 2) {
+            setCMM(true);
+        } 
+        if (serverBoard.grid[1][2] === 2) {
+            setCMR(true);
+        } 
+        if (serverBoard.grid[2][0] === 2) {
+            setCBL(true);
+        } 
+        if (serverBoard.grid[2][1] === 2) {
+            setCBM(true);
+        } 
+        if (serverBoard.grid[2][2] === 2) {
+            setCBR(true);
+        }
+    }
+
+    const sendBoard = async (updatedBoard) => {
         try {
-            const response = await api.post("/api/board");
-            setBoard(response.data);
-            console.log("fetched board:", response.data);
+            const response = await api.post("/api/board", updatedBoard);
+            setTimeout(() => {
+                setBoard(response.data);
+                console.log("fetched board:", board);
+                updateServerBoard(board);
+                setTurn("Your Turn")
+            }, 1000)
         } catch (error) {
             console.error("Error sending board:", error);
         }
@@ -78,27 +157,39 @@ const Game = () => {
                             <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={()=>{setXTL(true)}}/>
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXTM(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXTR(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXML(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXMM(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXMR(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXBL(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXBM(true)} />
-                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXBR(true)} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XTL ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XTL ? null : () => updatePlayerBoard('XTL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XTM ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XTM ? null : () => updatePlayerBoard('XTM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XTR ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XTR ? null : () => updatePlayerBoard('XTR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XML ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XML ? null : () => updatePlayerBoard('XML')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XMM ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XMM ? null : () => updatePlayerBoard('XMM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XMR ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XMR ? null : () => updatePlayerBoard('XMR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XBL ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XBL ? null : () => updatePlayerBoard('XBL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XBM ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XBM ? null : () => updatePlayerBoard('XBM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XBR ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XBR ? null : () => updatePlayerBoard('XBR')} />
                             </div>
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150}/></div>
-                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XTL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XTM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XTR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XML ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XMM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XMR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XBL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XBM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={XBR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                            </div>
+
+                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
                             </div>
                 
                         </div>
