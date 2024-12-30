@@ -6,6 +6,7 @@ import api from '../api/axiosConfig'
 import LeaderboardCard from "../components/LeaderboardCard";
 import LoginContext from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
+import { RxCross2 } from "react-icons/rx";
 
 const Game = () => {
 
@@ -17,6 +18,25 @@ const Game = () => {
 
     const [users, setUsers] = useState();
     const { currentUser, deleteUser } = useContext(LoginContext);
+
+    const [XTL, setXTL] = useState(false);
+    const [XTM, setXTM] = useState(false);
+    const [XTR, setXTR] = useState(false);
+    const [XML, setXML] = useState(false);
+    const [XMM, setXMM] = useState(false);
+    const [XMR, setXMR] = useState(false);
+    const [XBL, setXBL] = useState(false);
+    const [XBM, setXBM] = useState(false);
+    const [XBR, setXBR] = useState(false);
+
+    const [board, setBoard] = useState({
+        grid: [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ],
+        winner: null
+    })
 
     useEffect(() => {
       const fetchUsers = async () => {
@@ -33,6 +53,16 @@ const Game = () => {
       fetchUsers();
     }, [currentUser]);
 
+    const sendBoard = async () => {
+        try {
+            const response = await api.post("/api/board");
+            setBoard(response.data);
+            console.log("fetched board:", response.data);
+        } catch (error) {
+            console.error("Error sending board:", error);
+        }
+    };
+
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
             
@@ -47,17 +77,30 @@ const Game = () => {
                         <div className="relative bg-primary-background-light aspect-1 rounded-lg flex justify-center items-center">
                             <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
 
-                            <div className="absolute top-[9%] left-[8.6%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all"/>
-                            <div className="absolute top-[9%] left-[37.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
-                            <div className="absolute top-[9%] left-[66.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={()=>{setXTL(true)}}/>
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXTM(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXTR(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXML(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXMM(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXMR(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXBL(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXBM(true)} />
+                                <div className="z-50 bg-transparent h-full aspect-1 rounded-lg hover:bg-[#4e4e4e42] hover:cursor-pointer transition-all" onClick={() => setXBR(true)} />
+                            </div>
 
-                            <div className="absolute top-[37.6%] left-[8.6%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
-                            <div className="absolute top-[37.6%] left-[37.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
-                            <div className="absolute top-[37.6%] left-[66.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
-
-                            <div className="absolute top-[66.4%] left-[8.6%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
-                            <div className="absolute top-[66.4%] left-[37.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
-                            <div className="absolute top-[66.4%] left-[66.4%] z-50 bg-transparent h-[25%] aspect-1 rounded-lg hover:bg-[#4e4e4e70] hover:cursor-pointer transition-all" />
+                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150}/></div>
+                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                            </div>
+                
                         </div>
 
                         <div className="flex justify-between">
