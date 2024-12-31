@@ -10,7 +10,6 @@ import { RxCross2, RxCircle } from "react-icons/rx";
 
 const Game = () => {
 
-    // const [username, setUsername] = useState("Guest");
     const [turn, setTurn] = useState("Your Turn")
     const background = "bg-primary-background-light rounded-lg px-5 py-3"
     const menuText = "text-xl"
@@ -99,6 +98,7 @@ const Game = () => {
 
     // renders the board as per server's input
     const updateServerBoard = (serverBoard) => {
+        console.log("updating server oard")
         if (serverBoard.grid[0][0] === 2) {
             setCTL(true);
         } 
@@ -133,8 +133,8 @@ const Game = () => {
             const response = await api.post("/api/board", updatedBoard);
             setTimeout(() => {
                 setBoard(response.data);
-                console.log("fetched board:", board);
-                updateServerBoard(board);
+                console.log("fetched board:", response.data);
+                updateServerBoard(response.data);
                 setTurn("Your Turn")
             }, 1000)
         } catch (error) {
@@ -157,15 +157,15 @@ const Game = () => {
                             <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XTL ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XTL ? null : () => updatePlayerBoard('XTL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XTM ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XTM ? null : () => updatePlayerBoard('XTM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XTR ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XTR ? null : () => updatePlayerBoard('XTR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XML ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XML ? null : () => updatePlayerBoard('XML')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XMM ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XMM ? null : () => updatePlayerBoard('XMM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XMR ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XMR ? null : () => updatePlayerBoard('XMR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XBL ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XBL ? null : () => updatePlayerBoard('XBL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XBM ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XBM ? null : () => updatePlayerBoard('XBM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!XBR ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={XBR ? null : () => updatePlayerBoard('XBR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL) ? null : () => updatePlayerBoard('XTL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM) ? null : () => updatePlayerBoard('XTM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR) ? null : () => updatePlayerBoard('XTR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML) ? null : () => updatePlayerBoard('XML')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM) ? null : () => updatePlayerBoard('XMM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR) ? null : () => updatePlayerBoard('XMR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL) ? null : () => updatePlayerBoard('XBL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM) ? null : () => updatePlayerBoard('XBM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR) ? null : () => updatePlayerBoard('XBR')} />
                             </div>
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
