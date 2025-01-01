@@ -131,12 +131,10 @@ const Game = () => {
     const sendBoard = async (updatedBoard) => {
         try {
             const response = await api.post("/api/board", updatedBoard);
-            setTimeout(() => {
-                setBoard(response.data);
-                console.log("fetched board:", response.data);
-                updateServerBoard(response.data);
-                setTurn("Your Turn")
-            }, 1000)
+            setBoard(response.data);
+            console.log("fetched board:", response.data);
+            updateServerBoard(response.data);
+            setTurn("Your Turn")
         } catch (error) {
             console.error("Error sending board:", error);
         }

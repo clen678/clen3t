@@ -14,22 +14,37 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import dev.cleng.clen3t.domain.Board;
 import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class BoardService {
+    String responseChanger = "";
     
-    public Optional<Board> processUserBoard(Board board) {
-        
-        Board clientBoard = board;
-        Board newBoard = new Board();
+    public Optional<Board> processUserBoard(Board board) throws RuntimeErrorException {
+        int loopCount = 0;
+        Optional<Board> clientBoard = Optional.of(board);
+        Optional<Board> newBoard = Optional.of(new Board());
 
         try {
-            HttpResponse<String> response = callOpenAi(convertGridToString(clientBoard.getGrid()));
-            newBoard = convertToBoard(response);
+            while(true) {
+                if (loopCount > 3) {
+                    System.out.println("Board is full or unexpected AI error, ending connection with AI");
+                    throw new RuntimeException();
+                }
+                HttpResponse<String> response = callOpenAi(convertGridToString(clientBoard.get().getGrid()));
+                newBoard = convertToBoard(response);
 
-            return Optional.of(newBoard);
+                if (newBoard.isPresent() && (validateAiBoard(clientBoard.get(), newBoard.get()))) {
+                    break;
+                }
+                responseChanger = "Your response was incorrect, try again";
+                loopCount++;
+            }
+
+            return newBoard;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -56,12 +71,12 @@ public class BoardService {
                         },
                         {
                             "role": "user",
-                            "content": "%s"
+                            "content": "%s,%s"
                         }
                     ],
                     "max_tokens": 50
                 }
-                """, boardString);
+                """, boardString, responseChanger);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
@@ -72,11 +87,18 @@ public class BoardService {
 
         var client = HttpClient.newHttpClient();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
+            responseChanger = "";
         return response;
     }
+    
+    private String convertGridToString (int[][] grid) {
+        String stringified = "[[" + grid[0][0] + "," + grid[0][1] + "," + grid[0][2] + "],[" + grid[1][0] + "," + grid[1][1] + "," + grid[1][2] + "],[" + grid[2][0] + "," + grid[2][1] + "," + grid[2][2] + "]]";
+        System.out.println("inputting board: " + stringified);
+        return stringified;
+    }
 
-    private Board convertToBoard(HttpResponse<String> response) throws IOException {
+    // converts the ai response to a board
+    private Optional<Board> convertToBoard(HttpResponse<String> response) throws IOException {
 
         // parse the JSON response to extract the board
         String updatedPositions = parseResponse(response.body());
@@ -86,15 +108,15 @@ public class BoardService {
         return convertStringToBoard(updatedPositions);
     }
 
-    private String convertGridToString (int[][] grid) {
-        String stringified = "[[" + grid[0][0] + "," + grid[0][1] + "," + grid[0][2] + "],[" + grid[1][0] + "," + grid[1][1] + "," + grid[1][2] + "],[" + grid[2][0] + "," + grid[2][1] + "," + grid[2][2] + "]]";
-        System.out.println("inputting board: " + stringified);
-        return stringified;
-    }
-
-    private Board convertStringToBoard(String input) {
+    private Optional<Board> convertStringToBoard(String input) {
         input = input.replaceAll("\\n", ","); // Remove newline characters
         String[] temp = input.split(",");
+
+        if(!validateAiResponse(temp)){
+            System.out.println("ai did not respond in correct format, trying again");
+            return Optional.empty();
+        }
+
         Board newBoard = new Board();
         newBoard.setGrid(new int[3][3]);
         for (String element : temp) {
@@ -111,7 +133,8 @@ public class BoardService {
         newBoard.getGrid()[2][1] = Integer.parseInt(temp[7]);
         newBoard.getGrid()[2][2] = Integer.parseInt(temp[8]);
 
-        return newBoard;
+        // could move validateAiBoard into here?
+        return Optional.of(newBoard);
     }
 
     private String parseResponse(String responseBody) throws IOException {
@@ -121,5 +144,43 @@ public class BoardService {
     // Navigate to the content field (e.g., choices[0].message.content)
     String content = root.get("choices").get(0).get("message").get("content").asText();
     return content;
+    }
+
+    private Boolean validateAiBoard(Board oldBoard, Board newBoard) {
+        Boolean result = true;
+        int[][] oldGrid = oldBoard.getGrid();
+        int[][] newGrid = newBoard.getGrid();
+        int OldOneCount = 0;
+        int OldTwoCount = 0;
+        int NewOneCount = 0;
+        int NewTwoCount = 0;
+
+        // check if ai returned duplicate board
+        for (int row=0; row <=2; row++) {
+            for (int col = 0; col <= 2; col++) {
+                if (oldGrid[row][col] == 1) {
+                    OldOneCount++;
+                } else if (oldGrid[row][col] == 2) {
+                    OldTwoCount++;
+                }
+
+                if (newGrid[row][col] == 1) {
+                    NewOneCount++;
+                } else if (newGrid[row][col] == 2) {
+                    NewTwoCount++;
+                }
+            }
+        }
+
+        if (!(OldOneCount == NewOneCount) || (OldTwoCount == NewTwoCount)) {
+            System.out.println("Invalid AI move, trying again");
+            result = false;
+        }
+
+        return result;
+    }
+    
+    private Boolean validateAiResponse(String[] input) {
+        return (input.length == 9 ? true : false);
     }
 }
