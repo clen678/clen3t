@@ -6,7 +6,7 @@ const ModelDropdown = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const { setAiModel } = useContext(GameContext);
-    const [selectedModel, setSelectedModel] = useState("GPT4O");
+    const [selectedModel, setSelectedModel] = useState("GPT 4o");
 
     const handleOpen = () => {
         setIsOpen(!isOpen);
@@ -15,10 +15,24 @@ const ModelDropdown = () => {
     // grabs the id of the selected currency from the selection and sets it as the selected currency
     const handleSelect = (event) => {
         const { id } = event.target;
-        setSelectedModel(id);
+        setDisplayModel(id);
         setIsOpen(false);
         setAiModel(id);
     };
+
+    const setDisplayModel = (id) => {
+        switch (id) {
+            case "GPT4O":
+                setSelectedModel("GPT 4o");
+                break;
+            case "GPTO1MINI":
+                setSelectedModel("GPT o1-mini");
+                break;
+            case "GEMINI":
+                setSelectedModel("Gemini");
+                break;
+        }
+    }
     
     return ( 
         <div className="relative">
