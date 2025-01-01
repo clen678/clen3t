@@ -30,12 +30,12 @@ public class BoardService {
         try {
             while(true) {
                 // TODO: MAKE THIS ERROR HANDLING BETTER
-                if (loopCount == 2) {
+                if (loopCount == 1) {
                     responseChanger = "GIVE A VALID RESPONSE, ONLY MODIFY THE 0's IN THE GRID as a list of numbers in the format '1,0,0,0,1,0,0,0,1', with no spaces, brackets, or line breaks, and without any extra text or explanations.";
                 }
                 
                 // cancel if AI fails more than 5 times
-                if (loopCount > 5) {
+                if (loopCount > 3) {
                     System.out.println("Board is full or unexpected AI error, ending connection with AI");
                     // throw new RuntimeException();
                     return clientBoard; // return original board
