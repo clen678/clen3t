@@ -20,6 +20,7 @@ const Game = () => {
     const [users, setUsers] = useState();
     const { currentUser, deleteUser } = useContext(LoginContext);
     const { aiModel } = useContext(GameContext);
+    const [loading, setLoading] = useState(false);
 
     const [XTL, setXTL] = useState(false);
     const [XTM, setXTM] = useState(false);
@@ -68,7 +69,7 @@ const Game = () => {
 
     // updates board from player input
     const updatePlayerBoard = (placed) => {
-        setTurn("AI's Turn")
+        setLoading(true);
         if (placed === 'XTL') {
             setXTL(true);
             board.grid[0][0] = 1;
@@ -141,11 +142,27 @@ const Game = () => {
             setBoard(response.data);
             console.log("fetched board:", response.data);
             updateServerBoard(response.data);
-            setTurn("Your Turn")
+            setLoading(false);
+            setTurn("Your Turn");
         } catch (error) {
             console.error("Error sending board:", error);
         }
     };
+
+    useEffect(() => {
+        if (loading) {
+            const interval = setInterval(() => {
+                setTurn(prevTurn => {
+                    if (prevTurn === "AI's Turn") return "AI's Turn.";
+                    if (prevTurn === "AI's Turn.") return "AI's Turn..";
+                    if (prevTurn === "AI's Turn..") return "AI's Turn...";
+                    return "AI's Turn";
+                });
+            }, 500);
+
+            return () => clearInterval(interval); // Cleanup interval on component unmount or when loading changes
+        }
+    }, [loading]);
 
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
@@ -186,21 +203,21 @@ const Game = () => {
                             </div>
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
-                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle size={150} /></div>
+                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
                             </div>
                 
                         </div>
 
                         <div className="flex justify-between">
-                            <p className="text-xl py-1 px-8 rounded-lg bg-primary-background-light text-center">{turn}</p>
+                            <p className="text-xl py-1 px-6 min-w-[33%] rounded-lg bg-primary-background-light text-center">{turn}</p>
                             <StdButton text={"Confirm"} colour={"blue"}></StdButton>
                         </div>
                     </div>

@@ -38,7 +38,7 @@ public class BoardService {
                 if (loopCount > 5) {
                     System.out.println("Board is full or unexpected AI error, ending connection with AI");
                     // throw new RuntimeException();
-                    break;
+                    return clientBoard; // return original board
                 }
                 HttpResponse<String> response = callOpenAi(convertGridToString(clientBoard.get().getGrid()), clientBoard.get().getModel());
                 newBoard = convertToBoard(response);
