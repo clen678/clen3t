@@ -7,7 +7,8 @@ import LeaderboardCard from "../components/LeaderboardCard";
 import LoginContext from "../context/LoginContext";
 import GameContext from "../context/GameContext";
 import { useNavigate } from "react-router-dom";
-import { RxCross2, RxCircle } from "react-icons/rx";
+import { RxCircle } from "react-icons/rx";
+import { IoCloseOutline } from "react-icons/io5";
 import ModelDropdown from "../components/ModelDropdown";
 
 const Game = () => {
@@ -190,28 +191,28 @@ const Game = () => {
                                 <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR) ? null : () => updatePlayerBoard('XBR')} />
                             </div>
 
-                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={XTL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XTM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XTR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XML ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XMM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XMR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XBL ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XBM ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
-                                <div className={XBR ? `text-primary-text` : `text-transparent`}><RxCross2 size={150} /></div>
+                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                <div className={XTL ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XTM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XTR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XML ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XMM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XMR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XBL ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XBM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                                <div className={XBR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
                             </div>
 
-                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
-                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle size={130} /></div>
+                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[7vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle  /></div>
+                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
                             </div>
                 
                         </div>
