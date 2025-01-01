@@ -5,8 +5,10 @@ import { useEffect, useState, useContext } from "react";
 import api from '../api/axiosConfig'
 import LeaderboardCard from "../components/LeaderboardCard";
 import LoginContext from "../context/LoginContext";
+import GameContext from "../context/GameContext";
 import { useNavigate } from "react-router-dom";
 import { RxCross2, RxCircle } from "react-icons/rx";
+import ModelDropdown from "../components/ModelDropdown";
 
 const Game = () => {
 
@@ -17,6 +19,7 @@ const Game = () => {
 
     const [users, setUsers] = useState();
     const { currentUser, deleteUser } = useContext(LoginContext);
+    const { aiModel } = useContext(GameContext);
 
     const [XTL, setXTL] = useState(false);
     const [XTM, setXTM] = useState(false);
@@ -44,7 +47,8 @@ const Game = () => {
             [0, 0, 0],
             [0, 0, 0]
         ],
-        winner: null
+        winner: null,
+        model: "GPT4O" //GPT40, GPTO1, GEMINI
     })
 
     useEffect(() => {
@@ -93,6 +97,9 @@ const Game = () => {
             setXBR(true);
             board.grid[2][2] = 1;
         }
+
+        console.log("sending board to server with model: ", aiModel);
+        board.model = aiModel;
         sendBoard(board);
     } 
 
@@ -205,7 +212,7 @@ const Game = () => {
                         <div className={`h-[40%] ${background} grid grid-rows-[40px_1fr_1fr]`}>
                             <h1 className={menuText}>Settings:</h1>
                             <div className="flex flex-col gap-[5%] justify-between">
-                                    <p>setting 1</p>
+                                    <ModelDropdown/>
                                     <p>setting 2</p>
                                     <p>setting 3</p>
                             </div>

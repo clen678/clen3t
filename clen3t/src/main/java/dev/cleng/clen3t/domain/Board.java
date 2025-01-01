@@ -13,6 +13,8 @@ public class Board {
 
     private Winner winner;
 
+    private String model;
+
     // Boolean xtl;
     // Boolean xtm;
     // Boolean xtr;

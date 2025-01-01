@@ -6,6 +6,7 @@ import Game from './pages/Game';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { LoginContextProvider } from './context/LoginContextProvider';
+import { GameContextProvider } from './context/GameContextProvider';
 
 
 function App() {
@@ -29,12 +30,14 @@ function App() {
   return (
     <BrowserRouter>
       <LoginContextProvider>
-        <Routes>
-          <Route path="/" element={<Start />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="game" element={<Game />} />
-        </Routes>
+        <GameContextProvider>
+          <Routes>
+            <Route path="/" element={<Start />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="game" element={<Game />} />
+          </Routes>
+        </GameContextProvider>
       </LoginContextProvider>
     </BrowserRouter>
   );

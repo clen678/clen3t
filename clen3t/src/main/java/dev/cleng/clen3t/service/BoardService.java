@@ -4,19 +4,18 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 import java.util.Optional;
 
 import javax.management.RuntimeErrorException;
 
 import dev.cleng.clen3t.domain.Board;
+import dev.cleng.clen3t.domain.Model;
 import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
@@ -30,17 +29,24 @@ public class BoardService {
 
         try {
             while(true) {
-                if (loopCount > 3) {
-                    System.out.println("Board is full or unexpected AI error, ending connection with AI");
-                    throw new RuntimeException();
+                // TODO: MAKE THIS ERROR HANDLING BETTER
+                if (loopCount == 2) {
+                    responseChanger = "GIVE A VALID RESPONSE, ONLY MODIFY THE 0's IN THE GRID as a list of numbers in the format '1,0,0,0,1,0,0,0,1', with no spaces, brackets, or line breaks, and without any extra text or explanations.";
                 }
-                HttpResponse<String> response = callOpenAi(convertGridToString(clientBoard.get().getGrid()));
+                
+                // cancel if AI fails more than 5 times
+                if (loopCount > 5) {
+                    System.out.println("Board is full or unexpected AI error, ending connection with AI");
+                    // throw new RuntimeException();
+                    break;
+                }
+                HttpResponse<String> response = callOpenAi(convertGridToString(clientBoard.get().getGrid()), clientBoard.get().getModel());
                 newBoard = convertToBoard(response);
 
                 if (newBoard.isPresent() && (validateAiBoard(clientBoard.get(), newBoard.get()))) {
                     break;
                 }
-                responseChanger = "Your response was incorrect, try again";
+                responseChanger = "Your last response was invalid, send a valid response either blocking the user from placing three 1's or try to make three 2's of yourself";
                 loopCount++;
             }
 
@@ -56,27 +62,49 @@ public class BoardService {
             return Optional.empty();
         }
     
-        private HttpResponse<String> callOpenAi(String boardString) throws IOException, InterruptedException {
+        private HttpResponse<String> callOpenAi(String boardString, String model) throws IOException, InterruptedException {
         Dotenv dotenv = Dotenv.configure()
                         .directory("C:/Users/Charles/OneDrive/Documents/Code/clen3t/src/main/resources/.env")
                         .load();
         String apiKey = dotenv.get("OPENAI_API_KEY");
-        var body = String.format("""
-                {
-                    "model": "gpt-4o",
-                    "messages": [
+        String body;
+        System.out.println("recived request for model: " + model);
+        if (model.equals("GPTO1MINI")) {
+            body = String.format(
+                    """
                         {
-                            "role": "system",
-                            "content": "You are an AI playing Tic Tac Toe. The board is a 3x3 grid, where '0' represents an empty spot, '1' is the user's move, and '2' is your move. Your will ALWAYS! place a 2 and block the user from completing three '1's in a row (horizontally, vertically, or diagonally) and to complete three '2's in a row to win. IMPORTANT Respond only with the updated grid as a list of numbers in the format '1,0,0,0,1,0,0,0,1', with no spaces, brackets, or line breaks, and without any extra text or explanations."
-                        },
-                        {
-                            "role": "user",
-                            "content": "%s,%s"
+                            "model": "o1-mini",
+                            "messages": [
+                                {
+                                    "role": "user",
+                                    "content": "You are an AI playing Tic Tac Toe. The board is a 3x3 grid, where '0' represents an empty spot, '1' is the user's move, and '2' is your move. Your will ALWAYS! place a 2 and block the user from completing three '1's in a row (horizontally, vertically, or diagonally). ALSO TRY TO WIN THE GAME and place three '2's in a row. IMPORTANT Respond only with the updated grid as a list of numbers in the format '1,0,0,0,1,0,0,0,1', with no spaces, brackets, or line breaks, and without any extra text or explanations. The user input is as 2d array: %s, %s"
+                                }
+                            ]
                         }
-                    ],
-                    "max_tokens": 50
-                }
-                """, boardString, responseChanger);
+                        """,
+                    boardString, responseChanger);
+            System.out.println("responding with o1-mini");
+        } else {
+                body = String.format(
+                        """
+                            {
+                                "model": "gpt-4o",
+                                "messages": [
+                                    {
+                                        "role": "system",
+                                        "content": "You are an AI playing Tic Tac Toe. The board is a 3x3 grid, where '0' represents an empty spot, '1' is the user's move, and '2' is your move. Your will ALWAYS! place a 2 and block the user from completing three '1's in a row (horizontally, vertically, or diagonally). ALSO TRY TO WIN THE GAME and place three '2's in a row. IMPORTANT Respond only with the updated grid as a list of numbers in the format '1,0,0,0,1,0,0,0,1', with no spaces, brackets, or line breaks, and without any extra text or explanations. The user input is as 2d array"
+                                    },
+                                    {
+                                        "role": "user",
+                                        "content": "%s,%s"
+                                    }
+                                ],
+                                "max_tokens": 50
+                            }
+                            """,
+                        boardString, responseChanger);
+                System.out.println("responding with 4o");
+        }
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
@@ -87,13 +115,15 @@ public class BoardService {
 
         var client = HttpClient.newHttpClient();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            responseChanger = "";
+        responseChanger = "";
+        // System.out.println("raw response: " + response.body());
         return response;
     }
     
     private String convertGridToString (int[][] grid) {
         String stringified = "[[" + grid[0][0] + "," + grid[0][1] + "," + grid[0][2] + "],[" + grid[1][0] + "," + grid[1][1] + "," + grid[1][2] + "],[" + grid[2][0] + "," + grid[2][1] + "," + grid[2][2] + "]]";
         System.out.println("inputting board: " + stringified);
+        System.out.println("with responseChanger: "+ responseChanger);
         return stringified;
     }
 
