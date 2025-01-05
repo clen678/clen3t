@@ -201,7 +201,7 @@ const Game = () => {
             winner: null,
             model: aiModel
         });
-        
+
         if (aiStart) {
             sendBoard(board)
             console.log("sending board with aistart:", aiStart)
@@ -295,6 +295,7 @@ const Game = () => {
                             <div className="flex-grow h-[98%] flex flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
                                 {users && users.length > 0
                                     ? users
+                                    .filter(user => user.highscore !== 0)
                                     .sort((a, b) => b.highscore - a.highscore)
                                     .map((user) => (<LeaderboardCard key={user.id} user={user} />))
                                     : <p>No users found</p>}

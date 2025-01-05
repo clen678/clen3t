@@ -38,7 +38,7 @@ export function LoginContextProvider({ children }) {
     const updateUserScore = async (winner) => {
         if (currentUser) {
 
-            var newScore = 0;
+            let newScore = 0;
             if (winner === 1) {
                 newScore = 25;
             } else if (winner === 2) {
