@@ -22,6 +22,7 @@ const Game = () => {
     const { currentUser, deleteUser, users, updateUserScore } = useContext(LoginContext);
     const { aiModel } = useContext(GameContext);
     const [loading, setLoading] = useState(false);
+    const [enableGrid, setEnableGrid] = useState(true);
 
     const [XTL, setXTL] = useState(false);
     const [XTM, setXTM] = useState(false);
@@ -56,6 +57,7 @@ const Game = () => {
     // updates board from player input
     const updatePlayerBoard = (placed) => {
         setLoading(true);
+        setEnableGrid(false);
         if (placed === 'XTL') {
             setXTL(true);
             board.grid[0][0] = 1;
@@ -129,16 +131,11 @@ const Game = () => {
             console.log("fetched board:", response.data);
             updateServerBoard(response.data);
             setLoading(false);
+            setEnableGrid(true);
             setTurn("Your Turn");
+        
+            checkWinner(response.data.winner);
 
-            // check for winner
-            if (response.data.winner === 1) {
-                setTurn("You Won!");
-                updateUserScore(response.data.winner);
-            } else if (response.data.winner === 2){
-                setTurn("AI Won");
-                updateUserScore(response.data.winner);
-            }
         } catch (error) {
             console.error("Error sending board:", error);
         }
@@ -159,9 +156,18 @@ const Game = () => {
         }
     }, [loading]);
 
-    // const checkWinner = (board) => {
+    const checkWinner = (winner) => {
+        if (winner !== 0) {
+            if (winner === 1) {
+                setTurn("You Won!");
+            } else if (winner === 2) {
+                setTurn("AI Won");
+            }
 
-    // }
+            setEnableGrid(false);
+            updateUserScore(winner);
+        }
+    }
 
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
@@ -178,15 +184,15 @@ const Game = () => {
                             <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL) ? null : () => updatePlayerBoard('XTL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM) ? null : () => updatePlayerBoard('XTM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR) ? null : () => updatePlayerBoard('XTR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML) ? null : () => updatePlayerBoard('XML')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM) ? null : () => updatePlayerBoard('XMM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR) ? null : () => updatePlayerBoard('XMR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL) ? null : () => updatePlayerBoard('XBL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM) ? null : () => updatePlayerBoard('XBM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR) ? null : () => updatePlayerBoard('XBR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL || !enableGrid) ? null : () => updatePlayerBoard('XTL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM || !enableGrid) ? null : () => updatePlayerBoard('XTM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR || !enableGrid) ? null : () => updatePlayerBoard('XTR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML || !enableGrid) ? null : () => updatePlayerBoard('XML')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM || !enableGrid) ? null : () => updatePlayerBoard('XMM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR || !enableGrid) ? null : () => updatePlayerBoard('XMR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL || !enableGrid) ? null : () => updatePlayerBoard('XBL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM || !enableGrid) ? null : () => updatePlayerBoard('XBM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR || !enableGrid) ? null : () => updatePlayerBoard('XBR')} />
                             </div>
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
