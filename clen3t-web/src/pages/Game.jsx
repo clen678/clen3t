@@ -18,8 +18,8 @@ const Game = () => {
     const menuText = "text-xl"
     const navigate = useNavigate();
 
-    const [users, setUsers] = useState();
-    const { currentUser, deleteUser } = useContext(LoginContext);
+    // const [users, setUsers] = useState();
+    const { currentUser, deleteUser, users, updateUserScore } = useContext(LoginContext);
     const { aiModel } = useContext(GameContext);
     const [loading, setLoading] = useState(false);
 
@@ -52,21 +52,6 @@ const Game = () => {
         winner: null,
         model: "GPT4O" //GPT40, GPTO1, GEMINI
     })
-
-    useEffect(() => {
-      const fetchUsers = async () => {
-        try {
-          const response = await api.get("/api/users");
-          setUsers(response.data);
-          console.log("fetched users:", response.data);
-            console.log("current user is:", currentUser)
-        } catch (error) {
-          console.error("Error fetching users:", error);
-        }
-      };
-
-      fetchUsers();
-    }, [currentUser]);
 
     // updates board from player input
     const updatePlayerBoard = (placed) => {
@@ -145,6 +130,15 @@ const Game = () => {
             updateServerBoard(response.data);
             setLoading(false);
             setTurn("Your Turn");
+
+            // check for winner
+            if (response.data.winner === 1) {
+                setTurn("You Won!");
+                updateUserScore(response.data.winner);
+            } else if (response.data.winner === 2){
+                setTurn("AI Won");
+                updateUserScore(response.data.winner);
+            }
         } catch (error) {
             console.error("Error sending board:", error);
         }
@@ -164,6 +158,10 @@ const Game = () => {
             return () => clearInterval(interval); // Cleanup interval on component unmount or when loading changes
         }
     }, [loading]);
+
+    // const checkWinner = (board) => {
+
+    // }
 
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">

@@ -53,8 +53,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<User>> updateUser(@PathVariable String id) {
-        return new ResponseEntity<Optional<User>>(userService.getSingleUser(id), HttpStatus.OK);
+    public ResponseEntity<Optional<User>> updateUser(@PathVariable String id, @RequestBody User user) throws UserNotFoundException {
+        return new ResponseEntity<Optional<User>>(userService.updateSingleUser(id, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

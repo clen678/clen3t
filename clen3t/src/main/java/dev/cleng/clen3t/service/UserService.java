@@ -54,15 +54,20 @@ public class UserService {
     }
 
     // Update a user
-    public Optional<User> updateSingleUser(String id, User updatedUser) {
+    public Optional<User> updateSingleUser(String id, User updatedUser) throws UserNotFoundException {
         Optional<User> foundUser = userRepository.findUserByUserId(id);
-
-        if (foundUser != null) {
-            updatedUser.setUserId(id); // learn
-            mongoTemplate.save(updatedUser); // persist changes
+        System.out.println("finding");
+        
+        if (foundUser.isPresent()) {
+            System.out.println("fioubd");
+            // updatedUser.setUserId(id); // learn
+            // userRepository.save(updatedUser); // persist changes
+            User user = foundUser.get();
+            user.setHighscore(updatedUser.getHighscore());
+            userRepository.save(user);
             return Optional.of(updatedUser);
         } else {
-            return Optional.empty();
+            throw new UserNotFoundException("user not found");
         }
     }
 

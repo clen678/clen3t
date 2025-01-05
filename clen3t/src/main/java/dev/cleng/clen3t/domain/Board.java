@@ -11,7 +11,7 @@ public class Board {
     
     private int[][] grid;
 
-    private Winner winner;
+    private int winner; //0 1 2
 
     private String model;
 

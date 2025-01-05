@@ -27,6 +27,14 @@ public class BoardService {
         Optional<Board> clientBoard = Optional.of(board);
         Optional<Board> newBoard = Optional.of(new Board());
 
+        // first see if player wins. if winner is detected here, it should always be the player
+        if (checkWinner(clientBoard.get().getGrid()).isPresent()) {
+            newBoard = clientBoard;
+            newBoard.get().setWinner(1);
+            System.out.println("winner set to (player): " + 1);
+            return newBoard;
+        }
+
         try {
             while(true) {
                 // TODO: MAKE THIS ERROR HANDLING BETTER
@@ -40,10 +48,20 @@ public class BoardService {
                     // throw new RuntimeException();
                     return clientBoard; // return original board
                 }
+
+                // call api for the new board
                 HttpResponse<String> response = callOpenAi(convertGridToString(clientBoard.get().getGrid()), clientBoard.get().getModel());
                 newBoard = convertToBoard(response);
 
+                // verify if ai response is valid
                 if (newBoard.isPresent() && (validateAiBoard(clientBoard.get(), newBoard.get()))) {
+
+                    //check if ai is winner
+                    Optional<Integer> winner = checkWinner(newBoard.get().getGrid());
+                    if (winner.isPresent()) {
+                        newBoard.get().setWinner(winner.get());
+                        System.out.println("winner set to (ai): " + winner.get());
+                    }
                     break;
                 }
                 responseChanger = "Your last response was invalid, send a valid response either blocking the user from placing three 1's or try to make three 2's of yourself";
@@ -185,7 +203,7 @@ public class BoardService {
         int NewOneCount = 0;
         int NewTwoCount = 0;
 
-        // check if ai returned duplicate board
+        // check if ai returned duplicate board or changed already placed moves
         for (int row=0; row <=2; row++) {
             for (int col = 0; col <= 2; col++) {
                 if (oldGrid[row][col] == 1) {
@@ -212,5 +230,41 @@ public class BoardService {
     
     private Boolean validateAiResponse(String[] input) {
         return (input.length == 9 ? true : false);
+    }
+
+    private Optional<Integer> checkWinner(int[][] grid) {
+        int winner = 0;
+
+        // check rows
+        for (int row=0; row<3; row++) {
+            if ((grid[row][0] == grid[row][1]) && (grid[row][1] == grid[row][2]) && (grid[row][0] != 0)) {
+                System.out.println(grid[row][0] + " wins");
+                winner = grid[row][0];
+            }
+        }
+
+        // check cols
+        for (int col = 0; col < 3; col++) {
+            if ((grid[0][col] == grid[1][col]) && (grid[1][col] == grid[2][col]) && (grid[0][col] != 0)) {
+                System.out.println(grid[0][col] + " wins");
+                winner = grid[0][col];
+            }
+        }
+
+        // check diagonals
+        if (grid[0][0] != 0 && grid[0][0] == grid[1][1] && grid[1][1] == grid[2][2]) {
+            System.out.println(grid[0][0] + " wins");
+            winner = grid[0][0];
+        }
+        if (grid[0][2] != 0 && grid[0][2] == grid[1][1] && grid[1][1] == grid[2][0]) {
+            System.out.println(grid[0][2] + " wins");
+            winner = grid[0][2];
+        }
+
+        if (winner != 0) {
+            return Optional.of(winner);
+        } else {
+            return Optional.empty();
+        }
     }
 }
