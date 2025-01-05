@@ -6,12 +6,15 @@ export function GameContextProvider({ children }) {
 
     // const [currentUser, setCurrentUser] = useState();
     const [aiModel, setAiModel] = useState("GTP4O");
+    const [aiStart, setAiStart] = useState(false);
 
 
 
     const contextValue = {
         aiModel,
+        aiStart,
         setAiModel,
+        setAiStart
     }
 
     return (

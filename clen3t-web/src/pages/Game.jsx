@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { RxCircle } from "react-icons/rx";
 import { IoCloseOutline } from "react-icons/io5";
 import ModelDropdown from "../components/ModelDropdown";
+import ToggleSlider from "../components/ToggleSlider";
 
 const Game = () => {
 
@@ -20,7 +21,7 @@ const Game = () => {
 
     // const [users, setUsers] = useState();
     const { currentUser, deleteUser, users, updateUserScore } = useContext(LoginContext);
-    const { aiModel } = useContext(GameContext);
+    const { aiModel, aiStart } = useContext(GameContext);
     const [loading, setLoading] = useState(false);
     const [enableGrid, setEnableGrid] = useState(true);
 
@@ -169,6 +170,44 @@ const Game = () => {
         }
     }
 
+    // reset grid and give ai 1 move when aistart is turned on
+    useEffect(() => {
+        setXTL(false);
+        setXTM(false);
+        setXTR(false);
+        setXML(false);
+        setXMM(false);
+        setXMR(false);
+        setXBL(false);
+        setXBM(false);
+        setXBR(false);
+        setCTL(false);
+        setCTM(false);
+        setCTR(false);
+        setCML(false);
+        setCMM(false);
+        setCMR(false);
+        setCBL(false);
+        setCBM(false);
+        setCBR(false);
+
+        // Reset the board state
+        setBoard({
+            grid: [
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
+            ],
+            winner: null,
+            model: aiModel
+        });
+        
+        if (aiStart) {
+            sendBoard(board)
+            console.log("sending board with aistart:", aiStart)
+        }
+    }, [aiStart]);
+
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
             
@@ -234,9 +273,15 @@ const Game = () => {
                         <div className={`h-[40%] ${background} grid grid-rows-[40px_1fr_1fr]`}>
                             <h1 className={menuText}>Settings:</h1>
                             <div className="flex flex-col gap-[5%] justify-between">
-                                    <ModelDropdown/>
+                                <div className="flex justify-between items-center">
+                                    <p>AI Model</p>
+                                    <ModelDropdown />
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>AI Start</p>
+                                    <ToggleSlider />
+                                </div>
                                     <p>setting 2</p>
-                                    <p>setting 3</p>
                             </div>
                             <div className="justify-self-end self-end">
                                 {currentUser && <button className=" hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}

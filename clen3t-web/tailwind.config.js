@@ -10,6 +10,7 @@ module.exports = {
                 "primary-red-darker": "#8a3636",
                 "primary-text": "#F5F5F5",
                 "primary-background": "#1C1D21",
+                "primary-background-lightish": "#626772",
                 "primary-background-light": "#35363D",
                 "primary-background-lighter" : "#4A4C54",
                 "primary-blue": "#5299C6",
