@@ -55,6 +55,8 @@ const Game = () => {
     const [UXBM, setUXBM] = useState(false);
     const [UXBR, setUXBR] = useState(false);
 
+    const [selectedMove, setSelectedMove] = useState();
+
     const [board, setBoard] = useState({
         grid: [
             [0, 0, 0],
@@ -65,49 +67,79 @@ const Game = () => {
         model: "GPT4O" //GPT40, GPTO1, GEMINI
     })
 
-    const [unconfirmedGrid, setUnconfirmedGrid] = useState ([
+    let unconfirmedGrid = [
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0]
-    ]);
+    ];
 
     // updates board from player input
-    const updatePlayerBoard = (placed) => {
+    const updatePlayerBoard = (selected) => {
+        resetUnconfirmed();
         setLoading(true);
         setEnableGrid(false);
-        if (placed === 'XTL') {
+        if (selected === 'XTL') {
             setXTL(true);
             board.grid[0][0] = 1;
-        } else if (placed === 'XTM') {
+        } else if (selected === 'XTM') {
             setXTM(true);
             board.grid[0][1] = 1;
-        } else if (placed === 'XTR') {
+        } else if (selected === 'XTR') {
             setXTR(true);
             board.grid[0][2] = 1;
-        } else if (placed === 'XML') {
+        } else if (selected === 'XML') {
             setXML(true);
             board.grid[1][0] = 1;
-        } else if (placed === 'XMM') {
+        } else if (selected === 'XMM') {
             setXMM(true);
             board.grid[1][1] = 1;
-        } else if (placed === 'XMR') {
+        } else if (selected === 'XMR') {
             setXMR(true);
             board.grid[1][2] = 1;
-        } else if (placed === 'XBL') {
+        } else if (selected === 'XBL') {
             setXBL(true);
             board.grid[2][0] = 1;
-        } else if (placed === 'XBM') {
+        } else if (selected === 'XBM') {
             setXBM(true);
             board.grid[2][1] = 1;
-        } else if (placed === 'XBR') {
+        } else if (selected === 'XBR') {
             setXBR(true);
             board.grid[2][2] = 1;
         }
 
         console.log("sending board to server with model: ", aiModel);
+        console.log("grid: ", board.grid);
         board.model = aiModel;
         sendBoard(board);
     } 
+
+    // updates board from player input
+    const displayUnfonfirmedMove = (placed) => {
+
+        resetUnconfirmed();
+
+        if (placed === 'XTL') {
+            setUXTL(true);
+        } else if (placed === 'XTM') {
+            setUXTM(true);
+        } else if (placed === 'XTR') {
+            setUXTR(true);
+        } else if (placed === 'XML') {
+            setUXML(true);
+        } else if (placed === 'XMM') {
+            setUXMM(true);
+        } else if (placed === 'XMR') {
+            setUXMR(true);
+        } else if (placed === 'XBL') {
+            setUXBL(true);
+        } else if (placed === 'XBM') {
+            setUXBM(true);
+        } else if (placed === 'XBR') {
+            setUXBR(true);
+        }
+        setSelectedMove(placed);
+        console.log("setting unconfirmed grid");
+    }
 
     // renders the board as per server's input
     const updateServerBoard = (serverBoard) => {
@@ -145,6 +177,7 @@ const Game = () => {
         try {
             const response = await api.post("/api/board", updatedBoard);
             setBoard(response.data);
+            unconfirmedGrid = response.data.grid;
             console.log("fetched board:", response.data);
             updateServerBoard(response.data);
             setLoading(false);
@@ -193,16 +226,18 @@ const Game = () => {
 
     // reset grid and give ai 1 move when aistart is turned on
     useEffect(() => {
+        console.log("ai model is:", aiModel)
         restartGame();
 
         if (aiStart) {
+            console.log("sending board with aistart:", aiStart, board)
             sendBoard(board)
-            console.log("sending board with aistart:", aiStart)
         }
     }, [aiStart]);
 
     const restartGame = () => {
-        console.log("restarting game")
+        console.log("restarting game",aiModel)
+        resetUnconfirmed();
         setXTL(false);
         setXTM(false);
         setXTR(false);
@@ -222,7 +257,7 @@ const Game = () => {
         setCBM(false);
         setCBR(false);
 
-        // Reset the board state
+        // reset the board state
         setBoard({
             grid: [
                 [0, 0, 0],
@@ -230,12 +265,24 @@ const Game = () => {
                 [0, 0, 0]
             ],
             winner: null,
-            model: aiModel
+            model: aiModel // for some reason this isnt set when turning AiStart on with server populated board
         });
-
+        
         setEnableGrid(true);
         setWinner(0);
         setTurn("Your Turn");
+    }
+
+    const resetUnconfirmed = () => {
+        setUXTL(false);
+        setUXTM(false);
+        setUXTR(false);
+        setUXML(false);
+        setUXMM(false);
+        setUXMR(false);
+        setUXBL(false);
+        setUXBM(false);
+        setUXBR(false);
     }
 
     return ( 
@@ -253,18 +300,19 @@ const Game = () => {
                             <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL || !enableGrid) ? null : () => updatePlayerBoard('XTL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM || !enableGrid) ? null : () => updatePlayerBoard('XTM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR || !enableGrid) ? null : () => updatePlayerBoard('XTR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML || !enableGrid) ? null : () => updatePlayerBoard('XML')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM || !enableGrid) ? null : () => updatePlayerBoard('XMM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR || !enableGrid) ? null : () => updatePlayerBoard('XMR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL || !enableGrid) ? null : () => updatePlayerBoard('XBL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM || !enableGrid) ? null : () => updatePlayerBoard('XBM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR || !enableGrid) ? null : () => updatePlayerBoard('XBR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL || UXTL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL || !enableGrid) ? null : () => displayUnfonfirmedMove('XTL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM || UXTM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM || !enableGrid) ? null : () => displayUnfonfirmedMove('XTM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR || UXTR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR || !enableGrid) ? null : () => displayUnfonfirmedMove('XTR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML || UXML || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML || !enableGrid) ? null : () => displayUnfonfirmedMove('XML')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM || UXMM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM || !enableGrid) ? null : () => displayUnfonfirmedMove('XMM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR || UXMR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR || !enableGrid) ? null : () => displayUnfonfirmedMove('XMR')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL || UXBL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL || !enableGrid) ? null : () => displayUnfonfirmedMove('XBL')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM || UXBM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM || !enableGrid) ? null : () => displayUnfonfirmedMove('XBM')} />
+                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR || UXBR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR || !enableGrid) ? null : () => displayUnfonfirmedMove('XBR')} />
                             </div>
 
-                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                            {/* confirmed player moves */}
+                            <div className="absolute z-49 bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
                                 <div className={XTL ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
                                 <div className={XTM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
                                 <div className={XTR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
@@ -274,6 +322,19 @@ const Game = () => {
                                 <div className={XBL ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
                                 <div className={XBM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
                                 <div className={XBR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                            </div>
+
+                            {/* unconfirmed player move */}
+                            <div className="absolute z-5 bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                <div className={UXTL ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXTM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXTR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXML ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXMM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXMR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXBL ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXBM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                <div className={UXBR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
                             </div>
 
                             <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[7vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
@@ -294,7 +355,7 @@ const Game = () => {
                             <p className="text-xl py-1 px-6 min-w-[33%] rounded-lg bg-primary-background-light text-center">{turn}</p>
                             {winner === 0 
                             ? 
-                                <StdButton text={"Confirm"} colour={"blue"}></StdButton>
+                                <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }}></StdButton>
                             :
                                 <StdButton text={"Restart"} colour={"blue"} onClick={restartGame}></StdButton>}
                         </div>
@@ -331,7 +392,7 @@ const Game = () => {
                                     ? users
                                     .filter(user => user.highscore !== 0)
                                     .sort((a, b) => b.highscore - a.highscore)
-                                    .map((user) => (<LeaderboardCard key={user.id} user={user} />))
+                                    .map((user) => (<LeaderboardCard key={user.userId} user={user} />))
                                     : <p>No users found</p>}
                             </div>
 

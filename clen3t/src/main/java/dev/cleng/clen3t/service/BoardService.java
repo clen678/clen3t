@@ -87,7 +87,7 @@ public class BoardService {
         String apiKey = dotenv.get("OPENAI_API_KEY");
         String body;
         System.out.println("recived request for model: " + model);
-        if (model.equals("GPTO1MINI")) {
+        if (model != null && model.equals("GPTO1MINI")) {
             body = String.format(
                     """
                         {
