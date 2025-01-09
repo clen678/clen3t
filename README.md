@@ -14,4 +14,4 @@ Enter into console "npm run start" in /clen3t-web
 Start backend:
 Run Clen3tApplication.java in /clen3t/src/main/java/dev/cleng/clen3t/
 
-![game screenshot](markdownImage.png)
+![game screenshot](https://raw.githubusercontent.com/clen678/clen3t/main/markdownImage.png)
