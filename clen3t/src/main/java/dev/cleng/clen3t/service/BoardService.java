@@ -27,10 +27,11 @@ public class BoardService {
         Optional<Board> clientBoard = Optional.of(board);
         Optional<Board> newBoard = Optional.of(new Board());
 
-        // first see if player wins. if winner is detected here, it should always be the player
-        if (checkWinner(clientBoard.get().getGrid()).isPresent()) {
+        // first see if player wins. if winner is detected here
+        Optional<Integer> winner = checkWinner(clientBoard.get().getGrid());
+        if (winner.isPresent()) {
             newBoard = clientBoard;
-            newBoard.get().setWinner(1);
+            newBoard.get().setWinner(winner.get());
             System.out.println("winner set to (player): " + 1);
             return newBoard;
         }
@@ -46,6 +47,7 @@ public class BoardService {
                 if (loopCount > 3) {
                     System.out.println("Board is full or unexpected AI error, ending connection with AI");
                     // throw new RuntimeException();
+                    clientBoard.get().setWinner(4); // signifies ai error
                     return clientBoard; // return original board
                 }
 
@@ -57,10 +59,10 @@ public class BoardService {
                 if (newBoard.isPresent() && (validateAiBoard(clientBoard.get(), newBoard.get()))) {
 
                     //check if ai is winner
-                    Optional<Integer> winner = checkWinner(newBoard.get().getGrid());
-                    if (winner.isPresent()) {
-                        newBoard.get().setWinner(winner.get());
-                        System.out.println("winner set to (ai): " + winner.get());
+                    Optional<Integer> newWinner = checkWinner(newBoard.get().getGrid());
+                    if (newWinner.isPresent()) {
+                        newBoard.get().setWinner(newWinner.get());
+                        System.out.println("winner set to (ai): " + newWinner.get());
                     }
                     break;
                 }
@@ -233,6 +235,7 @@ public class BoardService {
     }
 
     private Optional<Integer> checkWinner(int[][] grid) {
+        System.out.println("checking winner...");
         int winner = 0;
         int nonZero = 0;
 
@@ -241,7 +244,6 @@ public class BoardService {
             if ((grid[row][0] == grid[row][1]) && (grid[row][1] == grid[row][2]) && (grid[row][0] != 0)) {
                 System.out.println(grid[row][0] + " wins");
                 winner = grid[row][0];
-                nonZero++;
             }
         }
 
@@ -250,7 +252,6 @@ public class BoardService {
             if ((grid[0][col] == grid[1][col]) && (grid[1][col] == grid[2][col]) && (grid[0][col] != 0)) {
                 System.out.println(grid[0][col] + " wins");
                 winner = grid[0][col];
-                nonZero++;
             }
         }
 
@@ -265,11 +266,21 @@ public class BoardService {
         }
 
         // check for tie (if board is full)
-        if (nonZero == 9) {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (grid[row][col] != 0) {
+                    nonZero++;
+                }
+            }
+        }
+        
+        // tie if no winner already found and board is full
+        if (nonZero == 9 && winner ==0) {
             winner = 3;
         }
 
         if (winner != 0) {
+            System.out.println("winner nonzero");
             return Optional.of(winner);
         } else {
             return Optional.empty();

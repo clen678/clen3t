@@ -217,6 +217,9 @@ const Game = () => {
             } else if (winner === 3) {
                 setWinner(3);
                 setTurn("Tie")
+            } else if (winner === 4) {
+                setWinner(3);
+                setTurn("AI Error")
             }
 
             setEnableGrid(false);
@@ -227,11 +230,12 @@ const Game = () => {
     // reset grid and give ai 1 move when aistart is turned on
     useEffect(() => {
         console.log("ai model is:", aiModel)
-        restartGame();
+        restartGame(); // doesnt seem to be restarting before board is sent
 
         if (aiStart) {
-            console.log("sending board with aistart:", aiStart, board)
-            sendBoard(board)
+            setTurn("AI's Turn");
+            console.log("sending board with aistart:", aiStart, board);
+            sendBoard(board);
         }
     }, [aiStart]);
 
