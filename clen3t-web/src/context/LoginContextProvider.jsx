@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig'
 
+// RENAME THIS TO GAME CONTEXT OR SOMETHING
 export function LoginContextProvider({ children }) {
 
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState();
     const [userScore, setUserScore] = useState();
     const [users, setUsers] = useState();
+    const [winner, setWinner] = useState(0); //0 1 2 3
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -16,7 +18,7 @@ export function LoginContextProvider({ children }) {
                 const response = await api.get("/api/users");
                 setUsers(response.data);
                 console.log("fetched users:", response.data);
-                console.log("current user is:", currentUser)
+                console.log("current user is:", currentUser);
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
@@ -26,7 +28,7 @@ export function LoginContextProvider({ children }) {
     }, [currentUser]);
 
     const deleteUser = async () => {
-        console.log("deleting id", currentUser.username, currentUser.userId)
+        console.log("deleting id", currentUser.username, currentUser.userId);
         try {
             const response = await api.delete(`/api/users/${currentUser.userId}`);
             setCurrentUser();
@@ -59,9 +61,11 @@ export function LoginContextProvider({ children }) {
     const contextValue = {
         users,
         currentUser,
+        winner,
         setCurrentUser,
         setUsers,
         deleteUser,
+        setWinner,
         updateUserScore,
     }
 

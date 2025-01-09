@@ -20,7 +20,7 @@ const Game = () => {
     const navigate = useNavigate();
 
     // const [users, setUsers] = useState();
-    const { currentUser, deleteUser, users, updateUserScore } = useContext(LoginContext);
+    const { currentUser, deleteUser, users, updateUserScore, winner, setWinner } = useContext(LoginContext);
     const { aiModel, aiStart } = useContext(GameContext);
     const [loading, setLoading] = useState(false);
     const [enableGrid, setEnableGrid] = useState(true);
@@ -45,6 +45,16 @@ const Game = () => {
     const [CBM, setCBM] = useState(false);
     const [CBR, setCBR] = useState(false);
 
+    const [UXTL, setUXTL] = useState(false);
+    const [UXTM, setUXTM] = useState(false);
+    const [UXTR, setUXTR] = useState(false);
+    const [UXML, setUXML] = useState(false);
+    const [UXMM, setUXMM] = useState(false);
+    const [UXMR, setUXMR] = useState(false);
+    const [UXBL, setUXBL] = useState(false);
+    const [UXBM, setUXBM] = useState(false);
+    const [UXBR, setUXBR] = useState(false);
+
     const [board, setBoard] = useState({
         grid: [
             [0, 0, 0],
@@ -54,6 +64,12 @@ const Game = () => {
         winner: null,
         model: "GPT4O" //GPT40, GPTO1, GEMINI
     })
+
+    const [unconfirmedGrid, setUnconfirmedGrid] = useState ([
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]);
 
     // updates board from player input
     const updatePlayerBoard = (placed) => {
@@ -160,9 +176,14 @@ const Game = () => {
     const checkWinner = (winner) => {
         if (winner !== 0) {
             if (winner === 1) {
+                setWinner(1);
                 setTurn("You Won!");
             } else if (winner === 2) {
+                setWinner(2);
                 setTurn("AI Won");
+            } else if (winner === 3) {
+                setWinner(3);
+                setTurn("Tie")
             }
 
             setEnableGrid(false);
@@ -172,6 +193,16 @@ const Game = () => {
 
     // reset grid and give ai 1 move when aistart is turned on
     useEffect(() => {
+        restartGame();
+
+        if (aiStart) {
+            sendBoard(board)
+            console.log("sending board with aistart:", aiStart)
+        }
+    }, [aiStart]);
+
+    const restartGame = () => {
+        console.log("restarting game")
         setXTL(false);
         setXTM(false);
         setXTR(false);
@@ -202,11 +233,10 @@ const Game = () => {
             model: aiModel
         });
 
-        if (aiStart) {
-            sendBoard(board)
-            console.log("sending board with aistart:", aiStart)
-        }
-    }, [aiStart]);
+        setEnableGrid(true);
+        setWinner(0);
+        setTurn("Your Turn");
+    }
 
     return ( 
         <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
@@ -262,7 +292,11 @@ const Game = () => {
 
                         <div className="flex justify-between">
                             <p className="text-xl py-1 px-6 min-w-[33%] rounded-lg bg-primary-background-light text-center">{turn}</p>
-                            <StdButton text={"Confirm"} colour={"blue"}></StdButton>
+                            {winner === 0 
+                            ? 
+                                <StdButton text={"Confirm"} colour={"blue"}></StdButton>
+                            :
+                                <StdButton text={"Restart"} colour={"blue"} onClick={restartGame}></StdButton>}
                         </div>
                     </div>
 

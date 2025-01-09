@@ -234,12 +234,14 @@ public class BoardService {
 
     private Optional<Integer> checkWinner(int[][] grid) {
         int winner = 0;
+        int nonZero = 0;
 
         // check rows
         for (int row=0; row<3; row++) {
             if ((grid[row][0] == grid[row][1]) && (grid[row][1] == grid[row][2]) && (grid[row][0] != 0)) {
                 System.out.println(grid[row][0] + " wins");
                 winner = grid[row][0];
+                nonZero++;
             }
         }
 
@@ -248,6 +250,7 @@ public class BoardService {
             if ((grid[0][col] == grid[1][col]) && (grid[1][col] == grid[2][col]) && (grid[0][col] != 0)) {
                 System.out.println(grid[0][col] + " wins");
                 winner = grid[0][col];
+                nonZero++;
             }
         }
 
@@ -259,6 +262,11 @@ public class BoardService {
         if (grid[0][2] != 0 && grid[0][2] == grid[1][1] && grid[1][1] == grid[2][0]) {
             System.out.println(grid[0][2] + " wins");
             winner = grid[0][2];
+        }
+
+        // check for tie (if board is full)
+        if (nonZero == 9) {
+            winner = 3;
         }
 
         if (winner != 0) {
