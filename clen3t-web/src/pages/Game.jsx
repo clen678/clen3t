@@ -296,7 +296,7 @@ const Game = () => {
                 <div className="h-full flex flex-col items-center">
                     <Header username={currentUser ? currentUser.username : "Guest"} />
 
-                    <div className="flex justify-between gap-5 max-2xl:w-[70%] max-xl:w-[80%] max-md:flex-col max-md:w-[70%]">
+                    <div className="flex justify-between gap-5 max-2xl:w-[70%] max-xl:w-[80%] max-md:flex-col max-md:w-[80%]">
 
                         {/* left pannel */}
                         <div className="flex flex-col gap-5 w-[100%]">
