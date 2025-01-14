@@ -291,7 +291,6 @@ const Game = () => {
 
     return ( 
         <div className=" w-full h-screen text-primary-text font-serif font-semibold flex flex-col">
-            <div className="flex-grow overflow-y-auto">
 
                 {/* content */}
                 <div className="h-full flex flex-col items-center">
@@ -407,7 +406,6 @@ const Game = () => {
                     </div>
                 <Footer />
                 </div>
-            </div>
 
         </div>
      );
