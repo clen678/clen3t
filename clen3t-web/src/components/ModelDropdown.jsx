@@ -36,14 +36,14 @@ const ModelDropdown = () => {
     
     return ( 
         <div className="relative">
-            <button className={`bg-primary-background-lighter px-3 min-h-[30px] min-w-[140px] hover:bg-primary-background-lighter active:bg-primary-background-light ${!isOpen ? 'rounded-lg' : 'rounded-tl-lg rounded-tr-lg'}`} onClick={handleOpen}>
+            <button className={`bg-primary-background-lighter px-3 min-h-[30px] min-w-[140px] hover:bg-primary-background-lighter active:bg-primary-background-light ${!isOpen ? 'rounded-lg' : 'rounded-tl-lg rounded-tr-lg'} max-xl:min-w-[120px]`} onClick={handleOpen}>
                 <div className="flex flex-row gap-2 justify-between">
                     {selectedModel}
                     {isOpen ? <FaSortDown /> : <FaSortDown className='origin-[90%][50%] -rotate-90 translate-y-[2px] -translate-x-[2px]' />}
                 </div>
             </button>
             {isOpen && (
-                <div className='z-50 absolute bg-primary-background-lighter flex flex-col min-w-[140px] items-start border-primary-background-lighter border-[2px] rounded-bl-lg rounded-br-lg' >
+                <div className='z-50 absolute bg-primary-background-lighter flex flex-col min-w-[140px] items-start border-primary-background-lighter border-[2px] rounded-bl-lg rounded-br-lg max-xl:min-w-[120px]' >
                     <form className="w-full">
                         <div className="w-full">
                             <input type="radio" id="GPT4O" className='peer hidden' onClick={handleSelect} />

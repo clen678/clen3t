@@ -7,7 +7,7 @@ const Footer = () => {
     }
 
     return ( 
-        <div className="mx-[1%] display flex justify-between items-end">
+        <div className="mx-[1%] display flex justify-between items-end w-full mt-auto py-2 px-4">
             <p>github.com/clen678</p>
             <button className="hover:text-primary-blue active:text-primary-blue-darker" onClick={handleClick}>
                 <BsQuestionSquareFill size={20} />

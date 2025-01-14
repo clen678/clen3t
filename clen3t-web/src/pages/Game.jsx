@@ -16,7 +16,7 @@ const Game = () => {
 
     const [turn, setTurn] = useState("Your Turn")
     const background = "bg-primary-background-light rounded-lg px-5 py-3"
-    const menuText = "text-xl"
+    const menuText = "text-xl max-md:text-lg"
     const navigate = useNavigate();
 
     // const [users, setUsers] = useState();
@@ -290,125 +290,125 @@ const Game = () => {
     }
 
     return ( 
-        <div className="bg-primary-background w-full h-screen text-primary-text font-serif font-semibold">
-            
-            {/* content */}
-            <div className="h-[96%] flex flex-col items-center">
-                <Header username={currentUser ? currentUser.username : "Guest"} />
+        <div className=" w-full h-screen text-primary-text font-serif font-semibold flex flex-col">
+            <div className="flex-grow overflow-y-auto">
 
-                <div className="flex justify-between w-[50%] gap-5">
+                {/* content */}
+                <div className="h-full flex flex-col items-center">
+                    <Header username={currentUser ? currentUser.username : "Guest"} />
 
-                    {/* left pannel */}
-                    <div className="flex flex-col gap-5 w-[100%]">
-                        <div className="relative bg-primary-background-light aspect-1 rounded-lg flex justify-center items-center">
-                            <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
+                    <div className="flex justify-between gap-5 max-2xl:w-[70%] max-xl:w-[80%] max-md:flex-col max-md:w-[70%]">
 
-                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL || UXTL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL || !enableGrid) ? null : () => displayUnfonfirmedMove('XTL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM || UXTM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM || !enableGrid) ? null : () => displayUnfonfirmedMove('XTM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR || UXTR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR || !enableGrid) ? null : () => displayUnfonfirmedMove('XTR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML || UXML || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML || !enableGrid) ? null : () => displayUnfonfirmedMove('XML')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM || UXMM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM || !enableGrid) ? null : () => displayUnfonfirmedMove('XMM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR || UXMR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR || !enableGrid) ? null : () => displayUnfonfirmedMove('XMR')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL || UXBL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL || !enableGrid) ? null : () => displayUnfonfirmedMove('XBL')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM || UXBM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM || !enableGrid) ? null : () => displayUnfonfirmedMove('XBM')} />
-                                <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR || UXBR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR || !enableGrid) ? null : () => displayUnfonfirmedMove('XBR')} />
+                        {/* left pannel */}
+                        <div className="flex flex-col gap-5 w-[100%]">
+                            <div className="relative bg-primary-background-light aspect-1 rounded-lg flex justify-center items-center">
+                                <img src={require("../assets/grid.svg").default} alt="Game grid" className="size-[90%]" draggable="false" />
+
+                                <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTL || CTL || UXTL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTL || CTL || !enableGrid) ? null : () => displayUnfonfirmedMove('XTL')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTM || CTM || UXTM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTM || CTM || !enableGrid) ? null : () => displayUnfonfirmedMove('XTM')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XTR || CTR || UXTR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XTR || CTR || !enableGrid) ? null : () => displayUnfonfirmedMove('XTR')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XML || CML || UXML || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XML || CML || !enableGrid) ? null : () => displayUnfonfirmedMove('XML')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMM || CMM || UXMM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMM || CMM || !enableGrid) ? null : () => displayUnfonfirmedMove('XMM')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XMR || CMR || UXMR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XMR || CMR || !enableGrid) ? null : () => displayUnfonfirmedMove('XMR')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBL || CBL || UXBL || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBL || CBL || !enableGrid) ? null : () => displayUnfonfirmedMove('XBL')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBM || CBM || UXBM || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBM || CBM || !enableGrid) ? null : () => displayUnfonfirmedMove('XBM')} />
+                                    <div className={`z-50 bg-transparent h-full aspect-1 rounded-lg ${!(XBR || CBR || UXBR || !enableGrid) ? 'hover:bg-[#4e4e4e42] hover:cursor-pointer' : ''} transition-all`} onClick={(XBR || CBR || !enableGrid) ? null : () => displayUnfonfirmedMove('XBR')} />
+                                </div>
+
+                                {/* confirmed player moves */}
+                                <div className="absolute z-49 bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr] max-xl:text-[12vw] max-md:text-[17vw]">
+                                    <div className={XTL ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XTM ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XTR ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XML ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XMM ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XMR ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XBL ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XBM ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={XBR ? `text-primary-text` : `text-transparent`}><IoCloseOutline /></div>
+                                </div>
+
+                                {/* unconfirmed player move */}
+                                <div className="absolute z-5 bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr] max-xl:text-[12vw] max-md:text-[17vw]">
+                                    <div className={UXTL ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXTM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXTR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXML ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXMM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXMR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXBL ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXBM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                    <div className={UXBR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
+                                </div>
+
+                                <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[7vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr] max-xl:text-[9vw] max-md:text-[14vw]">
+                                    <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                    <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
+                                </div>
+
                             </div>
 
-                            {/* confirmed player moves */}
-                            <div className="absolute z-49 bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={XTL ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XTM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XTR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XML ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XMM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XMR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XBL ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XBM ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
-                                <div className={XBR ? `text-primary-text` : `text-transparent`}><IoCloseOutline  /></div>
+                            <div className="flex justify-between">
+                                <p className={`py-1 px-6 min-w-[33%] rounded-lg bg-primary-background-light text-center max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
+                                {winner === 0
+                                    ?
+                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }}></StdButton>
+                                    :
+                                    <StdButton text={"Restart"} colour={"blue"} onClick={restartGame}></StdButton>}
                             </div>
-
-                            {/* unconfirmed player move */}
-                            <div className="absolute z-5 bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[9vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={UXTL ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXTM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXTR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXML ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXMM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXMR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXBL ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXBM ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                                <div className={UXBR ? `text-primary-background-lighter` : `text-transparent`}><IoCloseOutline /></div>
-                            </div>
-
-                            <div className="absolute bg-[#86353500] w-[85%] aspect-1 gap-[2%] text-[7vw] grid items-center justify-items-center grid-cols-[1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr]">
-                                <div className={CTL ? `text-primary-text` : `text-transparent`}><RxCircle  /></div>
-                                <div className={CTM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CTR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CML ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CMM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CMR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CBL ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CBM ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                                <div className={CBR ? `text-primary-text` : `text-transparent`}><RxCircle /></div>
-                            </div>
-                
                         </div>
 
-                        <div className="flex justify-between">
-                            <p className="text-xl py-1 px-6 min-w-[33%] rounded-lg bg-primary-background-light text-center">{turn}</p>
-                            {winner === 0 
-                            ? 
-                                <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }}></StdButton>
-                            :
-                                <StdButton text={"Restart"} colour={"blue"} onClick={restartGame}></StdButton>}
-                        </div>
-                    </div>
+                        {/* right pannel */}
+                        <div className="flex flex-col w-[50%] gap-5 max-md:flex-col max-md:w-full max-md:justify-between">
 
-                    {/* right pannel */}
-                    <div className="flex flex-col w-[50%] gap-5">
-
-                        {/* settings */}
-                        <div className={`h-[40%] ${background} grid grid-rows-[40px_1fr_1fr]`}>
-                            <h1 className={menuText}>Settings:</h1>
-                            <div className="flex flex-col gap-[5%] justify-between">
-                                <div className="flex justify-between items-center">
-                                    <p>AI Model</p>
-                                    <ModelDropdown />
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>AI Start</p>
-                                    <ToggleSlider />
-                                </div>
+                            {/* settings */}
+                            <div className={`h-[40%] ${background} grid grid-rows-[40px_1fr_1fr] max-md:w-full max-md:h-[200px]`}>
+                                <h1 className={menuText}>Settings:</h1>
+                                <div className="flex flex-col gap-[6px] justify-between">
+                                    <div className="flex justify-between items-center">
+                                        <p>AI Model</p>
+                                        <ModelDropdown />
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <p>AI Start</p>
+                                        <ToggleSlider />
+                                    </div>
                                     <p>setting 2</p>
+                                </div>
+                                <div className="justify-self-end self-end">
+                                    {currentUser && <button className=" hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}
+                                </div>
                             </div>
-                            <div className="justify-self-end self-end">
-                                {currentUser && <button className=" hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}
+
+                            {/* leaderboard */}
+                            <div className={`h-[60%] ${background} grid grid-rows-[40px_6fr] min-h-0 max-md:w-full max-md:h-full`}>
+                                <h1 className={menuText}>Leaderboard:</h1>
+
+                                <div className="flex-grow h-[98%] flex flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
+                                    {users && users.length > 0
+                                        ? users
+                                            .filter(user => user.highscore !== 0)
+                                            .sort((a, b) => b.highscore - a.highscore)
+                                            .map((user) => (<LeaderboardCard key={user.userId} user={user} />))
+                                        : <p>No users found</p>}
+                                </div>
+
                             </div>
                         </div>
 
-                        {/* leaderboard */}
-                        <div className={`h-[60%] ${background} grid grid-rows-[40px_6fr] min-h-0`}>
-                            <h1 className={menuText}>Leaderboard:</h1>
-
-                            <div className="flex-grow h-[98%] flex flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-md scrollbar-track-transparent scrollbar-thumb-primary-background-lighter scrollbar-thumb-rounded-full scrollbar-thin">
-                                {users && users.length > 0
-                                    ? users
-                                    .filter(user => user.highscore !== 0)
-                                    .sort((a, b) => b.highscore - a.highscore)
-                                    .map((user) => (<LeaderboardCard key={user.userId} user={user} />))
-                                    : <p>No users found</p>}
-                            </div>
-
-                        </div>
                     </div>
-
+                <Footer />
                 </div>
-
-
             </div>
 
-            <Footer />
         </div>
      );
 }
