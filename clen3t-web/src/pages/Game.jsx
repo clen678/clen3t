@@ -356,7 +356,7 @@ const Game = () => {
                             </div>
 
                             <div className="flex justify-between">
-                                <p className={`py-1 px-6 min-w-[33%] rounded-lg bg-primary-background-light text-center max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
+                            <p className={`py-1 px-6 min-w-[25%] rounded-lg bg-primary-background-light text-center text-xl max-xl:min-w-[33%] max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
                                 {winner === 0
                                     ?
                                     <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }}></StdButton>
