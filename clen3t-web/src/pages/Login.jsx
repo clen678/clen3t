@@ -50,8 +50,10 @@ const Login = () => {
 
                 <form action="" className="mt-[8%] w-[30%] h-[70%] flex flex-col justify-between rounded-lg bg-primary-background-light px-8 py-8 max-[1600px]:w-[40%] max-[1170px]:w-[50%] max-[730px]:w-[70%] max-[730px]:h-[80%]" onSubmit={handleSubmit}>
                     <div>
-                        <h1 className="text-5xl max-[730px]:text-4xl">tic tac toe.</h1>
-                        <h2 className="text-3xl max-[730px]:text-2xl">clen3t</h2>
+                        <Link to="/game">
+                            <h1 className="text-5xl max-[730px]:text-4xl">tic tac toe.</h1>
+                            <h2 className="text-3xl max-[730px]:text-2xl">clen3t</h2>
+                        </Link>
 
                         <div className="flex flex-col w-[70%] my-[10%] max-[730px]:w-[85%]">
                             <label htmlFor="username" className={labelStyle}>Username</label>
