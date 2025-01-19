@@ -173,6 +173,7 @@ const Game = () => {
         }
     }
 
+    // sends the board to the server for an AI response
     const sendBoard = async (updatedBoard) => {
         try {
             const response = await api.post("/api/board", updatedBoard);
@@ -193,6 +194,7 @@ const Game = () => {
         }
     };
 
+    // update label to dislay loading when waiting for server response
     useEffect(() => {
         if (loading) {
             const interval = setInterval(() => {
@@ -204,10 +206,11 @@ const Game = () => {
                 });
             }, 500);
 
-            return () => clearInterval(interval); // Cleanup interval on component unmount or when loading changes
+            return () => clearInterval(interval); // cleanup interval on component unmount or when loading changes
         }
     }, [loading]);
 
+    // check the board for a winner
     const checkWinner = (winner) => {
         if (winner !== 0) {
             if (winner === 1) {
@@ -231,7 +234,7 @@ const Game = () => {
 
     // reset grid and give ai 1 move when aistart is turned on
     useEffect(() => {
-        restartGame(); // doesnt seem to be restarting before board is sent
+        restartGame();
         console.log("ai model is:", aiModel)
 
         if (aiStart) {
@@ -241,6 +244,7 @@ const Game = () => {
         }
     }, [aiStart]);
 
+    // reset the game state
     const restartGame = () => {
         console.log("restarting game", aiModel)
         resetUnconfirmed();
