@@ -26,9 +26,13 @@ const Login = () => {
             setCurrentUser(user);
             
         } catch (error) {
-            alert("Username or password incorrect")
-            console.error("Error fetching users/login:", error);
-            console.log("no users found for login details:", username, password)
+            if (error.response && (error.response.status === 404 || error.response.status === 403)) {
+                alert("Username or password incorrect")
+                console.error("Error fetching users/login:", error);
+                console.log("no users found for login details:", username, password)
+            } else {
+                alert("Server is offline, unable to login")
+            }
         }
     };
 

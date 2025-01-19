@@ -29,9 +29,12 @@ const Register = () => {
             }
             
         } catch (error) {
-            // conflict error
-            console.error("Failed to register:", error);
-            alert(error)
+            if (error.response && error.response.status === 409) {
+                alert("User already exists, login instead")
+                console.error("Username already exists:", error);
+            } else {
+                alert("Server is offline, unable to Register")
+            }
         }
     };
 
