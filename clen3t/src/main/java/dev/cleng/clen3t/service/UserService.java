@@ -24,16 +24,28 @@ public class UserService {
     private MongoTemplate mongoTemplate;
 
     // Get all users
+    // fix error handling for this
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        try {
+            return userRepository.findAll();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    // Get a single user
-    public Optional<User> getSingleUser(String id) {
-        return userRepository.findUserByUserId(id);
+    // Get a single user by id
+    public Optional<User> getSingleUser(String id) throws UserNotFoundException {
+        Optional<User> foundUser = userRepository.findUserByUserId(id);
+
+        if (!foundUser.isPresent()) {
+            throw new UserNotFoundException("User not found for id: " + id);
+        }
+
+        return foundUser;
     }
 
     // Create a new user
+    // error handling here is lazy fix this
     public Optional<User> createNewUser(User user) throws UserConflictException {
         List<User> users = userRepository.findAll();
 
@@ -55,13 +67,12 @@ public class UserService {
         return Optional.empty();
     }
 
-    // Update a user
-    public Optional<User> updateSingleUser(String id, User updatedUser) throws UserNotFoundException {
+    // Update a user by id
+    // possible security concerns?
+    public Optional<User> updateSingleUserScore(String id, User updatedUser) throws UserNotFoundException {
         Optional<User> foundUser = userRepository.findUserByUserId(id);
-        System.out.println("finding");
         
         if (foundUser.isPresent()) {
-            System.out.println("fioubd");
             // updatedUser.setUserId(id); // learn
             // userRepository.save(updatedUser); // persist changes
             User user = foundUser.get();
@@ -69,18 +80,19 @@ public class UserService {
             userRepository.save(user);
             return Optional.of(updatedUser);
         } else {
-            throw new UserNotFoundException("user not found");
+            throw new UserNotFoundException("User not found for id: " + id);
         }
     }
 
-    //i think the exception is never going to be caught?? might have to use if statement instead if return is empty
+    // Delete a user by id
     public void deleteSingleUser(String id) throws UserNotFoundException {
-    try {
         Optional<User> user = userRepository.findUserByUserId(id);
+
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("User not found for id: " + id);
+        }
+
         userRepository.deleteByUserId(id);
-    } catch (UserNotFoundException e) {
-        return;
-    }
     }
 
     // Login a user

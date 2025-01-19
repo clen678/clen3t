@@ -34,12 +34,22 @@ public class UserController {
     
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<List<User>>(userService.getAllUsers(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<List<User>>(userService.getAllUsers(), HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getUser(@PathVariable String id) {
-        return new ResponseEntity<Optional<User>>(userService.getSingleUser(id), HttpStatus.OK);
+    public ResponseEntity<Optional<User>> getUser(@PathVariable String id) throws UserNotFoundException {
+        try {
+            return new ResponseEntity<Optional<User>>(userService.getSingleUser(id), HttpStatus.OK);
+
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
@@ -47,6 +57,7 @@ public class UserController {
 
         try {
             return new ResponseEntity<Optional<User>>(userService.createNewUser(user), HttpStatus.CREATED);
+
         } catch (UserConflictException e) {
             return new ResponseEntity<Optional<User>>(HttpStatus.CONFLICT);
         } catch (Exception e) {
@@ -55,8 +66,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<User>> updateUser(@PathVariable String id, @RequestBody User user) throws UserNotFoundException {
-        return new ResponseEntity<Optional<User>>(userService.updateSingleUser(id, user), HttpStatus.OK);
+    public ResponseEntity<Optional<User>> updateUserScore(@PathVariable String id, @RequestBody User user) throws UserNotFoundException {
+        
+        try {
+            return new ResponseEntity<Optional<User>>(userService.updateSingleUserScore(id, user), HttpStatus.OK);
+
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -65,7 +82,7 @@ public class UserController {
         try {
             userService.deleteSingleUser(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-            
+
         } catch (UserNotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
