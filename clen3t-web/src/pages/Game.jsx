@@ -231,8 +231,8 @@ const Game = () => {
 
     // reset grid and give ai 1 move when aistart is turned on
     useEffect(() => {
-        console.log("ai model is:", aiModel)
         restartGame(); // doesnt seem to be restarting before board is sent
+        console.log("ai model is:", aiModel)
 
         if (aiStart) {
             setTurn("AI's Turn");
