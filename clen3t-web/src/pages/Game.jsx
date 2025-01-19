@@ -225,6 +225,7 @@ const Game = () => {
             } else if (winner === 4) {
                 setWinner(3);
                 setTurn("AI Error")
+                alert("GPT 4o has issues replying sometimes :(")
             }
 
             setEnableGrid(false);
