@@ -239,7 +239,7 @@ const Game = () => {
         console.log("ai model is:", aiModel)
 
         if (aiStart) {
-            setTurn("AI's Turn");
+            setLoading(true);
             console.log("sending board with aistart:", aiStart, board);
             sendBoard(board);
         }
