@@ -38,7 +38,7 @@ public class UserController {
             return new ResponseEntity<List<User>>(userService.getAllUsers(), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -48,7 +48,7 @@ public class UserController {
             return new ResponseEntity<Optional<User>>(userService.getSingleUser(id), HttpStatus.OK);
 
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -59,9 +59,9 @@ public class UserController {
             return new ResponseEntity<Optional<User>>(userService.createNewUser(user), HttpStatus.CREATED);
 
         } catch (UserConflictException e) {
-            return new ResponseEntity<Optional<User>>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (Exception e) {
-            return new ResponseEntity<Optional<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -72,7 +72,7 @@ public class UserController {
             return new ResponseEntity<Optional<User>>(userService.updateSingleUserScore(id, user), HttpStatus.OK);
 
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -84,7 +84,7 @@ public class UserController {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -95,9 +95,9 @@ public class UserController {
             return new ResponseEntity<Optional<User>>(userService.loginSingleUser(loginRequest), HttpStatus.OK);
 
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InvalidLoginDetailsException e) {
-            return new ResponseEntity<>(Optional.empty(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         
     }
