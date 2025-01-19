@@ -188,6 +188,8 @@ const Game = () => {
 
         } catch (error) {
             console.error("Error sending board:", error);
+            alert("Internal server error: Cannot retrieve AI response");
+            restartGame();
         }
     };
 
@@ -240,27 +242,10 @@ const Game = () => {
     }, [aiStart]);
 
     const restartGame = () => {
-        console.log("restarting game",aiModel)
+        console.log("restarting game", aiModel)
         resetUnconfirmed();
-        setXTL(false);
-        setXTM(false);
-        setXTR(false);
-        setXML(false);
-        setXMM(false);
-        setXMR(false);
-        setXBL(false);
-        setXBM(false);
-        setXBR(false);
-        setCTL(false);
-        setCTM(false);
-        setCTR(false);
-        setCML(false);
-        setCMM(false);
-        setCMR(false);
-        setCBL(false);
-        setCBM(false);
-        setCBR(false);
-
+        resetConfirmed();
+        setLoading(false);
         // reset the board state
         setBoard({
             grid: [
@@ -287,6 +272,27 @@ const Game = () => {
         setUXBL(false);
         setUXBM(false);
         setUXBR(false);
+    }
+
+    const resetConfirmed = () => {
+        setXTL(false);
+        setXTM(false);
+        setXTR(false);
+        setXML(false);
+        setXMM(false);
+        setXMR(false);
+        setXBL(false);
+        setXBM(false);
+        setXBR(false);
+        setCTL(false);
+        setCTM(false);
+        setCTR(false);
+        setCML(false);
+        setCMM(false);
+        setCMR(false);
+        setCBL(false);
+        setCBM(false);
+        setCBR(false);
     }
 
     return ( 

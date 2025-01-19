@@ -30,6 +30,8 @@ const ModelDropdown = () => {
                 break;
             case "GEMINI":
                 setSelectedModel("Gemini");
+                //TEMPORARY
+                alert("Gemini not yet implemented, using GPT 4o")
                 break;
         }
     }
