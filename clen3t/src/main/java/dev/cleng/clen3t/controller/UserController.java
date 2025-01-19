@@ -88,16 +88,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<Optional<User>> loginUser(@RequestBody LoginRequest loginRequest) throws UserNotFoundException, InvalidLoginDetailsException {
 
         try {
             return new ResponseEntity<Optional<User>>(userService.loginSingleUser(loginRequest), HttpStatus.OK);
 
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
         } catch (InvalidLoginDetailsException e) {
-            return new ResponseEntity<Optional<User>>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(Optional.empty(), HttpStatus.FORBIDDEN);
         }
         
     }

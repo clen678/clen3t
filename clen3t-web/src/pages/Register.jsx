@@ -29,6 +29,7 @@ const Register = () => {
             }
             
         } catch (error) {
+            // conflict error
             console.error("Failed to register:", error);
             alert(error)
         }

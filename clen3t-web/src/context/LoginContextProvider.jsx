@@ -40,15 +40,15 @@ export function LoginContextProvider({ children }) {
     const updateUserScore = async (winner) => {
         if (currentUser) {
 
-            let newScore = 0;
+            let scoreUpdate = 0;
             if (winner === 1) {
-                newScore = 25;
+                scoreUpdate = 25;
             } else if (winner === 2) {
-                newScore = -25;
+                scoreUpdate = -25;
             }
 
             try {
-                currentUser.highscore = currentUser.highscore + newScore;
+                currentUser.highscore = currentUser.highscore + scoreUpdate;
                 const response = await api.put(`/api/users/${currentUser.userId}`, currentUser);
                 setCurrentUser(response.data);
                 console.log("updated user:", response.data);

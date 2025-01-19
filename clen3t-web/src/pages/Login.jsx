@@ -12,31 +12,23 @@ const Login = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [users, setUsers] = useState();
     const { currentUser, setCurrentUser, } = useContext(LoginContext);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        console.log("pressed login")
+
         e.preventDefault();
         try {
-            const response = await api.get("/api/users");
-            setUsers(response.data);
+            const response = await api.post("/api/users/login", { username: username, password: password }); //backend requires format username, password
+            const user = response.data
 
-            console.log("fetched users:", response.data);
-
-            const user = response.data.find((u) => u.username === username && u.password === password);
-
-            if(user){
-                console.log("found user:", user);
-                setCurrentUser(user);
-            } else {
-                alert("Username or password incorrect")
-                console.log("no users found for login details:", username, password)
-            }
+            console.log("found user:", user);
+            setCurrentUser(user);
             
         } catch (error) {
+            alert("Username or password incorrect")
             console.error("Error fetching users/login:", error);
+            console.log("no users found for login details:", username, password)
         }
     };
 
