@@ -384,9 +384,12 @@ const Game = () => {
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <p>AI Start</p>
-                                        <ToggleSlider />
+                                        <ToggleSlider AI={true}/>
                                     </div>
-                                    <p>setting 2</p>
+                                    <div className="flex justify-between items-center">
+                                        <p>setting 2</p>
+                                        <ToggleSlider AI={false} />
+                                    </div>
                                 </div>
                                 <div className="justify-self-end self-end">
                                     {currentUser && <button className=" hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}

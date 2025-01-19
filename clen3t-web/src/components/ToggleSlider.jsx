@@ -1,14 +1,19 @@
 import { useState, useContext } from "react";
 import GameContext from "../context/GameContext";
 
-const ToggleSlider = () => {
+const ToggleSlider = ({ AI }) => {
 
     const { aiStart, setAiStart } = useContext(GameContext);
     const [on, setOn] = useState(false);
 
     const handleClick = () => {
-        setAiStart(!on);
         setOn(!on);
+        
+        if (AI) {
+            setAiStart(!on);
+        } else {
+            //TODO other setting
+        }
     }
 
     return ( 
