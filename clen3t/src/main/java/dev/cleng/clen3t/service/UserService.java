@@ -9,7 +9,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import dev.cleng.clen3t.UserRepository;
+import dev.cleng.clen3t.domain.LoginRequest;
 import dev.cleng.clen3t.domain.User;
+import dev.cleng.clen3t.exceptions.InvalidLoginDetailsException;
 import dev.cleng.clen3t.exceptions.UserConflictException;
 import dev.cleng.clen3t.exceptions.UserNotFoundException;
 
@@ -71,6 +73,7 @@ public class UserService {
         }
     }
 
+    //i think the exception is never going to be caught?? might have to use if statement instead if return is empty
     public void deleteSingleUser(String id) throws UserNotFoundException {
     try {
         Optional<User> user = userRepository.findUserByUserId(id);
@@ -78,5 +81,23 @@ public class UserService {
     } catch (UserNotFoundException e) {
         return;
     }
+    }
+
+    // Login a user
+    public Optional<User> loginSingleUser(LoginRequest loginRequest) throws UserNotFoundException, InvalidLoginDetailsException {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+
+        Optional<User> foundUser = userRepository.findUserByUsername(username);
+        
+        if (!foundUser.isPresent()) {
+            throw new UserNotFoundException("User not found for username: " + username);
+        }
+
+        if (!foundUser.get().getPassword().equals(password)) {
+            throw new InvalidLoginDetailsException("Invalid login details");
+        }
+
+        return foundUser;
     }
 }

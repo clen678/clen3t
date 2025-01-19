@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.cleng.clen3t.domain.User;
+import dev.cleng.clen3t.domain.LoginRequest;
+import dev.cleng.clen3t.exceptions.InvalidLoginDetailsException;
 import dev.cleng.clen3t.exceptions.UserConflictException;
 import dev.cleng.clen3t.exceptions.UserNotFoundException;
 import dev.cleng.clen3t.service.UserService;
@@ -63,9 +65,24 @@ public class UserController {
         try {
             userService.deleteSingleUser(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+            
         } catch (UserNotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<Optional<User>> loginUser(@RequestBody LoginRequest loginRequest) throws UserNotFoundException, InvalidLoginDetailsException {
+
+        try {
+            return new ResponseEntity<Optional<User>>(userService.loginSingleUser(loginRequest), HttpStatus.OK);
+
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+        } catch (InvalidLoginDetailsException e) {
+            return new ResponseEntity<Optional<User>>(HttpStatus.FORBIDDEN);
+        }
+        
     }
     
 }
