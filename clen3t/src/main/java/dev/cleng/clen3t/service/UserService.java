@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+// import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import dev.cleng.clen3t.UserRepository;
@@ -21,8 +21,8 @@ public class UserService {
     @Autowired //automatically instantiates the userRepo var to access db
     private UserRepository userRepository;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    // @Autowired
+    // private MongoTemplate mongoTemplate;
 
     // Get all users
     // fix error handling for this
@@ -65,7 +65,7 @@ public class UserService {
         try {
             return Optional.of(userRepository.insert(user));
         } catch (Exception e) {
-            // TODO: handle exception
+            // do this
         }
         return Optional.empty();
     }

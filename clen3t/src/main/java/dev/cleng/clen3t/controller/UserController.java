@@ -3,7 +3,6 @@ package dev.cleng.clen3t.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ import dev.cleng.clen3t.exceptions.UserConflictException;
 import dev.cleng.clen3t.exceptions.UserNotFoundException;
 import dev.cleng.clen3t.service.UserService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = { "http://localhost:3000", "https://clen3t.vercel.app" })
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

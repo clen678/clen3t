@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.cleng.clen3t.domain.Board;
 import dev.cleng.clen3t.service.BoardService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = { "http://localhost:3000", "https://clen3t.vercel.app" })
 @RestController
 @RequestMapping("/api/board")
 public class BoardController {

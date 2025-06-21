@@ -15,7 +15,6 @@ import java.util.Optional;
 import javax.management.RuntimeErrorException;
 
 import dev.cleng.clen3t.domain.Board;
-import dev.cleng.clen3t.domain.Model;
 import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
