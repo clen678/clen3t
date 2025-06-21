@@ -84,9 +84,10 @@ public class BoardService {
     
         private HttpResponse<String> callOpenAi(String boardString, String model) throws IOException, InterruptedException {
         Dotenv dotenv = Dotenv.configure()
-                        .directory("C:/Users/Charles/OneDrive/Documents/Code/clen3t/src/main/resources/.env")
-                        .load();
+                .directory("clen3t/src/main/resources")
+                .load();
         String apiKey = dotenv.get("OPENAI_API_KEY");
+        System.out.println("apiKeyYYYYYYYYYYY: " + apiKey);
         String body;
         System.out.println("recived request for model: " + model);
         if (model != null && model.equals("GPTO1MINI")) {
@@ -136,7 +137,7 @@ public class BoardService {
         var client = HttpClient.newHttpClient();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         responseChanger = "";
-        // System.out.println("raw response: " + response.body());
+        System.out.println("raw response: " + response.body());
         return response;
     }
     
