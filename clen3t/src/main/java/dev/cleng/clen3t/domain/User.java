@@ -1,5 +1,7 @@
 package dev.cleng.clen3t.domain;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,6 +29,10 @@ public class User {
     private String password;
 
     private Integer highscore;
+
+    private Date lastGamePlayedDate;
+
+    private Integer gamesPlayedToday;
 
     //future: rank, friends, userId, etc.
 

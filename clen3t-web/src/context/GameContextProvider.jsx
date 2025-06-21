@@ -7,6 +7,8 @@ export function GameContextProvider({ children }) {
     // const [currentUser, setCurrentUser] = useState();
     const [aiModel, setAiModel] = useState("GTP4O");
     const [aiStart, setAiStart] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [enableBypass, setEnableBypass] = useState(false);
 
 
 
@@ -14,7 +16,11 @@ export function GameContextProvider({ children }) {
         aiModel,
         aiStart,
         setAiModel,
-        setAiStart
+        setAiStart,
+        showModal,
+        setShowModal,
+        enableBypass,
+        setEnableBypass,
     }
 
     return (

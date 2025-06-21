@@ -11,6 +11,7 @@ import { RxCircle } from "react-icons/rx";
 import { IoCloseOutline } from "react-icons/io5";
 import ModelDropdown from "../components/ModelDropdown";
 import ToggleSlider from "../components/ToggleSlider";
+import Modal from "../components/Modal";
 
 const Game = () => {
 
@@ -20,8 +21,8 @@ const Game = () => {
     const navigate = useNavigate();
 
     // const [users, setUsers] = useState();
-    const { currentUser, deleteUser, users, updateUserScore, winner, setWinner } = useContext(LoginContext);
-    const { aiModel, aiStart } = useContext(GameContext);
+    const { currentUser, deleteUser, users, updateUserScore, winner, setWinner, getGuestGamesPlayed } = useContext(LoginContext);
+    const { aiModel, aiStart, showModal, setShowModal, enableBypass } = useContext(GameContext);
     const [loading, setLoading] = useState(false);
     const [enableGrid, setEnableGrid] = useState(true);
 
@@ -175,6 +176,11 @@ const Game = () => {
 
     // sends the board to the server for an AI response
     const sendBoard = async (updatedBoard) => {
+        if (!validateCanPlay()) {
+            restartGame();
+            setTurn("Max Games Limit Reached");
+            return;
+        }
         try {
             const response = await api.post("/api/board", updatedBoard);
             setBoard(response.data);
@@ -229,7 +235,9 @@ const Game = () => {
             }
 
             setEnableGrid(false);
-            updateUserScore(winner);
+            if (winner !== 4) {
+                updateUserScore(winner);
+            }
         }
     }
 
@@ -300,8 +308,35 @@ const Game = () => {
         setCBR(false);
     }
 
+    const validateCanPlay = () => {
+        if (enableBypass) {
+            console.log("bypass enabled, allowing play");
+            return true;
+        }
+        
+        if (currentUser) {
+            if (currentUser.gamesPlayedToday >= 3) {
+                console.log("user has played 3 games, cannot play again");
+                setShowModal(true);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            const guestGamesPlayed = getGuestGamesPlayed();
+            if (guestGamesPlayed >= 3) {
+                console.log("guest has played 3 games today, cannot play again");
+                setShowModal(true);
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     return ( 
-        <div className=" w-full h-screen text-primary-text font-serif font-semibold flex flex-col">
+        <>
+            <div className=" w-full h-screen text-primary-text font-serif font-semibold flex flex-col">
 
                 {/* content */}
                 <div className="h-full flex flex-col items-center">
@@ -367,7 +402,7 @@ const Game = () => {
                             </div>
 
                             <div className="flex justify-between">
-                            <p className={`py-1 px-6 min-w-[25%] rounded-lg bg-primary-background-light text-center text-xl max-xl:min-w-[33%] max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
+                                <p className={`py-1 px-6 min-w-[25%] rounded-lg bg-primary-background-light text-center text-xl max-xl:min-w-[33%] max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
                                 {winner === 0
                                     ?
                                     <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }}></StdButton>
@@ -389,15 +424,19 @@ const Game = () => {
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <p>AI Start</p>
-                                        <ToggleSlider AI={true}/>
+                                        <ToggleSlider AI={true} />
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <p>setting 2</p>
-                                        <ToggleSlider AI={false} />
+                                        <p>Games Played Today:</p>
+                                        {currentUser ?
+                                            <p className="font-extrabold mr-[8%]"> {currentUser.gamesPlayedToday ? currentUser.gamesPlayedToday : "0"}</p>
+                                            :
+                                            <p className="font-extrabold mr-[8%]">{getGuestGamesPlayed() ? getGuestGamesPlayed() : "0"}</p>
+                                        }
                                     </div>
                                 </div>
                                 <div className="justify-self-end self-end">
-                                    {currentUser && <button className=" hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}
+                                    {currentUser && <button className="hover:text-primary-red active:text-primary-red-darker mt-auto" onClick={deleteUser}>Delete Account</button>}
                                 </div>
                             </div>
 
@@ -418,10 +457,12 @@ const Game = () => {
                         </div>
 
                     </div>
-                <Footer />
+                    <Footer />
                 </div>
 
-        </div>
+            </div>
+            {showModal && <Modal />}
+        </>
      );
 }
  

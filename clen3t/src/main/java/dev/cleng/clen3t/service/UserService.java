@@ -1,5 +1,6 @@
 package dev.cleng.clen3t.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,6 +59,8 @@ public class UserService {
 
         user.setUserId(UUID.randomUUID().toString());
         user.setHighscore(0);
+        user.setGamesPlayedToday(0);
+        user.setLastGamePlayedDate(null); // set to null initially
 
         try {
             return Optional.of(userRepository.insert(user));
@@ -111,5 +114,37 @@ public class UserService {
         }
 
         return foundUser;
+    }
+
+    // Increment games played today
+    public Optional<User> incrementUserGamesPlayed(String id) throws UserNotFoundException {
+        Optional<User> foundUser = userRepository.findUserByUserId(id);
+
+        if (foundUser.isPresent()) {
+            User existingUser = foundUser.get();
+            Date now = new java.util.Date();
+
+            // Check if lastGamePlayedDate is today
+            boolean sameDay = false;
+            if (existingUser.getLastGamePlayedDate() != null) {
+                java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                cal1.setTime(now);
+                cal2.setTime(existingUser.getLastGamePlayedDate());
+                sameDay = cal1.get(java.util.Calendar.YEAR) == cal2.get(java.util.Calendar.YEAR)
+                        && cal1.get(java.util.Calendar.DAY_OF_YEAR) == cal2.get(java.util.Calendar.DAY_OF_YEAR);
+            }
+
+            if (sameDay) {
+                existingUser.setGamesPlayedToday(existingUser.getGamesPlayedToday() + 1);
+            } else {
+                existingUser.setGamesPlayedToday(1);
+            }
+            existingUser.setLastGamePlayedDate(now);
+            userRepository.save(existingUser);
+            return Optional.of(existingUser);
+        } else {
+            throw new UserNotFoundException("User not found for id: " + id);
+        }
     }
 }

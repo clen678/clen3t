@@ -101,5 +101,17 @@ public class UserController {
         }
         
     }
+
+    @PutMapping("/{id}/increment")
+    public ResponseEntity<Optional<User>> incrementGamesPlayed(@PathVariable String id)
+            throws UserNotFoundException {
+
+        try {
+            return new ResponseEntity<Optional<User>>(userService.incrementUserGamesPlayed(id), HttpStatus.OK);
+
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     
 }
