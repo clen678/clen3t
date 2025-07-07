@@ -15,6 +15,11 @@ import Modal from "../components/Modal";
 
 const Game = () => {
 
+    //TEMP ALERT
+    useEffect(() => {
+        alert("I have run out credit for the backend :( will buy more soon")
+    }, []);
+
     const [turn, setTurn] = useState("Your Turn")
     const background = "bg-primary-background-light rounded-lg px-5 py-3"
     const menuText = "text-xl max-md:text-lg"
