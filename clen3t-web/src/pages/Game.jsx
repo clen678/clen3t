@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import StdButton from "../components/StdButton";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, use } from "react";
 import api from '../api/axiosConfig'
 import LeaderboardCard from "../components/LeaderboardCard";
 import LoginContext from "../context/LoginContext";
@@ -19,18 +19,21 @@ const Game = () => {
     // useEffect(() => {
     //     alert("I have run out credit for the backend :( will buy more soon")
     // }, []);
-
+    
     const [turn, setTurn] = useState("Your Turn")
     const background = "bg-primary-background-light rounded-lg px-5 py-3"
     const menuText = "text-xl max-md:text-lg"
     const navigate = useNavigate();
-
+    
     // const [users, setUsers] = useState();
     const { currentUser, deleteUser, users, updateUserScore, winner, setWinner, getGuestGamesPlayed } = useContext(LoginContext);
     const { aiModel, aiStart, showModal, setShowModal, enableBypass } = useContext(GameContext);
     const [loading, setLoading] = useState(false);
     const [enableGrid, setEnableGrid] = useState(true);
-
+    
+    useEffect(() => {
+        console.log("enablegrid is: ", enableGrid);
+    }, [enableGrid]);
     const [XTL, setXTL] = useState(false);
     const [XTM, setXTM] = useState(false);
     const [XTR, setXTR] = useState(false);
@@ -61,7 +64,7 @@ const Game = () => {
     const [UXBM, setUXBM] = useState(false);
     const [UXBR, setUXBR] = useState(false);
 
-    const [selectedMove, setSelectedMove] = useState();
+    const [selectedMove, setSelectedMove] = useState(null);
 
     const [board, setBoard] = useState({
         grid: [
@@ -111,8 +114,9 @@ const Game = () => {
         } else if (selected === 'XBR') {
             setXBR(true);
             board.grid[2][2] = 1;
-        } else {
+        } else if (selected === null || selected === undefined) {
             console.error("Invalid or no move selected");
+            alert("Select a valid move before confirming");
             setLoading(false);
             setEnableGrid(true);
             return;
@@ -200,7 +204,7 @@ const Game = () => {
             setLoading(false);
             setEnableGrid(true);
             setTurn("Your Turn");
-        
+            setSelectedMove(null);
             checkWinner(response.data.winner);
 
         } catch (error) {
@@ -415,7 +419,7 @@ const Game = () => {
                                 <p className={`py-1 px-6 min-w-[25%] rounded-lg bg-primary-background-light text-center text-xl max-xl:min-w-[33%] max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
                                 {winner === 0
                                     ?
-                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }} disabled={enableGrid}></StdButton>
+                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }} disabled={!enableGrid}></StdButton>
                                     :
                                     <StdButton text={"Restart"} colour={"blue"} onClick={restartGame}></StdButton>}
                             </div>

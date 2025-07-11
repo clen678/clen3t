@@ -9,7 +9,7 @@ const StdButton = ({text, link, colour, onClick, disabled}) => {
             ${colour === "blue"
             ? "bg-primary-blue hover:bg-primary-blue-dark active:bg-primary-blue-darker"
             : "bg-primary-red hover:bg-primary-red-dark active:bg-primary-red-darker"}
-            ${disabled ? (colour === "blue" ? "bg-primary-blue-dark cursor-default" : "bg-primary-red-dark cursor-default") : ""}`}
+            ${disabled ? (colour === "blue" ? "bg-primary-blue-dark cursor-default active:bg-primary-blue-dark" : "bg-primary-red-dark cursor-default active:bg-primary-red-dark") : ""}`}
             onClick={disabled ? null : onClick}>
             {text}
         </Link>
