@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef } from 'react';
 import GameContext from "../context/GameContext";
 import StdButton from './StdButton.jsx';
 
@@ -6,6 +6,7 @@ const Modal = () => {
     const { setShowModal, setEnableBypass } = useContext(GameContext);
     const [bypassPassword, setBypassPassword] = useState("");
     const [error, setError] = useState("");
+    const modalContentRef = useRef(null);
 
     const handleClose = () => {
         setShowModal(false);
@@ -22,9 +23,16 @@ const Modal = () => {
         }
     };
 
+    const handleBackgroundClick = (e) => {
+        // Check if the click originated from the background div itself, and not from within the modal content
+        if (modalContentRef.current && !modalContentRef.current.contains(e.target)) {
+            handleClose();
+        }
+    };
+
     return (
-        <div className="fixed text-white z-[100] top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center font-serif">
-            <div className="bg-primary-background-light rounded-lg px-5 py-6 shadow-lg max-w-md w-full flex flex-col items-center max-md:w-[90%]">
+        <div className="fixed text-white z-[100] top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center font-serif" onClick={handleBackgroundClick}>
+            <div className="bg-primary-background-light rounded-lg px-5 py-6 shadow-lg max-w-md w-full flex flex-col items-center max-md:w-[90%]" ref={modalContentRef}>
 
                 <h2 className="text-3xl max-md:text-lg mb-6 font-semibold">Oh no!</h2>
                 <p className="mb-6 text-primary-text">You have reached your limit on the maximum games played for this account.</p>

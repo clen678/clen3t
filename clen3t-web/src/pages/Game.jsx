@@ -270,6 +270,7 @@ const Game = () => {
     // reset the game state
     const restartGame = () => {
         console.log("restarting game", aiModel)
+        setSelectedMove(null);
         resetUnconfirmed();
         resetConfirmed();
         setLoading(false);
