@@ -1,5 +1,6 @@
 package dev.cleng.clen3t.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,6 +20,11 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class BoardService {
+    // Inject the API key directly using Spring's @Value annotation
+    // Add for deployment
+    @Value("${OPENAI_API_KEY}") 
+    private String openAiApiKey;
+    
     String responseChanger = "";
     
     public Optional<Board> processUserBoard(Board board) throws RuntimeErrorException {
@@ -82,11 +88,12 @@ public class BoardService {
         }
     
         private HttpResponse<String> callOpenAi(String boardString, String model) throws IOException, InterruptedException {
-        Dotenv dotenv = Dotenv.configure()
-                .directory("clen3t/src/main/resources")
-                .load();
-        String apiKey = dotenv.get("OPENAI_API_KEY");
-        System.out.println("apiKeyYYYYYYYYYYY: " + apiKey);
+        // Comment out for deployment on fly.io
+        // Dotenv dotenv = Dotenv.configure()
+        //         .directory("clen3t/src/main/resources")
+        //         .load();
+        // String apiKey = dotenv.get("OPENAI_API_KEY");
+        // System.out.println("apiKeyYYYYYYYYYYY: " + apiKey);
         String body;
         System.out.println("recived request for model: " + model);
         if (model != null && model.equals("GPTO1MINI")) {
@@ -129,7 +136,7 @@ public class BoardService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
+                .header("Authorization", "Bearer " + openAiApiKey) // apiKey from environment variable for local development
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 
