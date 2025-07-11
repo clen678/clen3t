@@ -111,6 +111,11 @@ const Game = () => {
         } else if (selected === 'XBR') {
             setXBR(true);
             board.grid[2][2] = 1;
+        } else {
+            console.error("Invalid or no move selected");
+            setLoading(false);
+            setEnableGrid(true);
+            return;
         }
 
         console.log("sending board to server with model: ", aiModel);
@@ -410,9 +415,9 @@ const Game = () => {
                                 <p className={`py-1 px-6 min-w-[25%] rounded-lg bg-primary-background-light text-center text-xl max-xl:min-w-[33%] max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
                                 {winner === 0
                                     ?
-                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }} disabled={!enableGrid}></StdButton>
+                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }} disabled={enableGrid}></StdButton>
                                     :
-                                    <StdButton text={"Restart"} colour={"blue"} onClick={restartGame} disabled={!enableGrid}></StdButton>}
+                                    <StdButton text={"Restart"} colour={"blue"} onClick={restartGame}></StdButton>}
                             </div>
                         </div>
 
