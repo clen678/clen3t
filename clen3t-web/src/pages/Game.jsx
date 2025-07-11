@@ -410,7 +410,7 @@ const Game = () => {
                                 <p className={`py-1 px-6 min-w-[25%] rounded-lg bg-primary-background-light text-center text-xl max-xl:min-w-[33%] max-md:text-lg max-md:min-w-[50%]`}>{turn}</p>
                                 {winner === 0
                                     ?
-                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }} disabled={!enableBypass}></StdButton>
+                                    <StdButton text={"Confirm"} colour={"blue"} onClick={() => { updatePlayerBoard(selectedMove) }} disabled={!enableGrid}></StdButton>
                                     :
                                     <StdButton text={"Restart"} colour={"blue"} onClick={restartGame} disabled={!enableGrid}></StdButton>}
                             </div>
